@@ -1,0 +1,1 @@
+// Middleware auth protection placeholder

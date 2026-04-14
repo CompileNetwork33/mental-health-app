@@ -1,0 +1,1 @@
+// JournalCard component placeholder
