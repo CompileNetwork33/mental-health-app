@@ -1,5 +1,4 @@
-import { createBrowserClient, createServerClient as createSSRServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import { createServerClient as createSSRServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -10,34 +9,7 @@ function getSupabaseConfig() {
     throw new Error('Missing Supabase environment variables.');
   }
 
-  return {
-    supabaseUrl,
-    supabaseAnonKey,
-  };
-}
-
-export function createClient() {
-  const { supabaseUrl: url, supabaseAnonKey: anonKey } = getSupabaseConfig();
-
-  return createBrowserClient(url, anonKey);
-}
-
-export async function createServerClient() {
-  const { supabaseUrl: url, supabaseAnonKey: anonKey } = getSupabaseConfig();
-  const cookieStore = await cookies();
-
-  return createSSRServerClient(url, anonKey, {
-    cookies: {
-      getAll() {
-        return cookieStore.getAll();
-      },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          cookieStore.set(name, value, options);
-        });
-      },
-    },
-  });
+  return { supabaseUrl, supabaseAnonKey };
 }
 
 export function createMiddlewareClient(request) {
@@ -70,3 +42,4 @@ export function createMiddlewareClient(request) {
 
   return { supabase, response };
 }
+

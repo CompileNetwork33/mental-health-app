@@ -1,17 +1,7 @@
 import { NextResponse } from 'next/server';
-import { createMiddlewareClient } from './lib/supabase';
+import { createMiddlewareClient } from './lib/supabase/middleware';
 
-const protectedRoutes = ['/dashboard', '/mood-tracker', '/journal', '/chat'];
-
-function isProtectedRoute(pathname) {
-  return protectedRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`));
-}
-
-export async function middleware(request) {
-  if (!isProtectedRoute(request.nextUrl.pathname)) {
-    return NextResponse.next();
-  }
-
+export async function proxy(request) {
   const { supabase, response } = createMiddlewareClient(request);
   const {
     data: { user },
