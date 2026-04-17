@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   CartesianGrid,
@@ -19,14 +18,6 @@ const moodOptions = [
   { mood: 'Neutral', score: 3, emoji: '😐' },
   { mood: 'Sad', score: 2, emoji: '😔' },
   { mood: 'Very Sad', score: 1, emoji: '😢' },
-];
-
-const navItems = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Mood Tracker', href: '/mood-tracker' },
-  { label: 'Journal', href: '/journal' },
-  { label: 'Chat with AI', href: '/chat' },
-  { label: 'Profile', href: '/profile' },
 ];
 
 function sameLocalDay(isoDate, now = new Date()) {
@@ -162,27 +153,8 @@ export default function MoodTrackerPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-sky-100 via-violet-50 to-emerald-100 text-slate-800">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 p-4 md:flex-row md:gap-6 md:p-6">
-        <aside className="rounded-3xl border border-white/80 bg-white/80 p-4 shadow-lg backdrop-blur md:sticky md:top-6 md:h-fit md:w-64">
-          <h2 className="mb-4 text-lg font-semibold text-violet-700">Mental Health Companion</h2>
-          <nav className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`rounded-2xl px-3 py-2 text-sm font-medium transition ${
-                  item.href === '/mood-tracker'
-                    ? 'bg-violet-500 text-white'
-                    : 'bg-violet-50 text-violet-700 hover:bg-violet-100'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </aside>
-
-        <section className="flex-1 space-y-4 md:space-y-6">
+      <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6">
+        <section className="space-y-4 md:space-y-6">
           <header className="rounded-3xl border border-white/80 bg-white/85 p-6 shadow-lg backdrop-blur">
             <h1 className="text-2xl font-semibold text-violet-700 md:text-3xl">Mood Tracker</h1>
             <p className="mt-2 text-sm text-slate-600">

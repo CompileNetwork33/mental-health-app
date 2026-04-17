@@ -1,17 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createClient } from '@/lib/supabase/client.js';
-
-const navItems = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Mood Tracker', href: '/mood-tracker' },
-  { label: 'Journal', href: '/journal' },
-  { label: 'Chat with AI', href: '/chat' },
-  { label: 'Profile', href: '/profile' },
-];
 
 function calculateStreak(moodDates) {
   const uniqueDays = Array.from(
@@ -236,27 +227,8 @@ export default function ProfilePage() {
 
   return (
     <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E]">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 p-4 md:flex-row md:gap-6 md:p-6">
-        <aside className="rounded-3xl border border-[#E6ECF5] bg-white p-4 shadow-md md:sticky md:top-6 md:h-fit md:w-64">
-          <h2 className="mb-4 text-lg font-semibold text-[#1A73E8]">Mental Health Companion</h2>
-          <nav className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`rounded-2xl px-3 py-2 text-sm font-medium transition ${
-                  item.href === '/profile'
-                    ? 'bg-[#1A73E8] text-white'
-                    : 'bg-[#F5F7FA] text-[#1A73E8] hover:bg-[#DDF3EF]'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </aside>
-
-        <section className="flex-1 space-y-4 md:space-y-6">
+      <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6">
+        <section className="space-y-4 md:space-y-6">
           <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
             <h1 className="text-2xl font-semibold text-[#1A73E8] md:text-3xl">Profile & Settings</h1>
             <p className="mt-2 text-sm text-[#1A1A2E]/80">

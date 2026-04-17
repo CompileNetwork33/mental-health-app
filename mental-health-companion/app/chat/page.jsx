@@ -1,16 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createClient } from '@/lib/supabase/client.js';
-
-const navItems = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Mood Tracker', href: '/mood-tracker' },
-  { label: 'Journal', href: '/journal' },
-  { label: 'Chat with AI', href: '/chat' },
-  { label: 'Profile', href: '/profile' },
-];
 
 const serenityGreeting = {
   id: 'greeting',
@@ -150,34 +141,8 @@ export default function ChatPage() {
 
   return (
     <main className="min-h-screen bg-[#FFF9F5] text-[#2D2D2D]">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 p-4 md:flex-row md:gap-6 md:p-6">
-        <aside className="rounded-3xl border border-[#FFE8DC] bg-[#FFE8DC] p-4 shadow-md md:sticky md:top-6 md:h-fit md:w-64">
-          <h2 className="mb-4 text-lg font-semibold text-[#6B4EFF]">Mental Health Companion</h2>
-          <nav className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`rounded-2xl px-3 py-2 text-sm font-medium transition ${
-                  item.href === '/chat'
-                    ? 'bg-[#6B4EFF] text-white'
-                    : 'bg-white text-[#6B4EFF] hover:bg-[#FFD93D]'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <a
-            href="tel:9152987821"
-            className="mt-4 block rounded-2xl bg-[#FF6B6B] px-4 py-3 text-center text-sm font-semibold text-white transition hover:opacity-90"
-          >
-            Crisis Helpline (iCall): 9152987821
-          </a>
-        </aside>
-
-        <section className="flex h-[calc(100vh-2rem)] min-h-[600px] flex-1 flex-col rounded-3xl border border-[#FFE8DC] bg-[#FFE8DC] shadow-md">
+      <div className="mx-auto w-full max-w-6xl">
+        <section className="flex h-[calc(100vh-7rem)] min-h-[600px] flex-1 flex-col rounded-3xl border border-[#FFE8DC] bg-[#FFE8DC] shadow-md">
           <header className="flex items-center justify-between rounded-t-3xl border-b border-[#FFD93D] bg-[#FFF9F5] px-4 py-4 sm:px-6">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#6B4EFF] text-lg text-white">
@@ -196,6 +161,14 @@ export default function ChatPage() {
           {error ? (
             <div className="mx-4 mt-4 rounded-xl bg-rose-100 px-3 py-2 text-sm text-rose-700 sm:mx-6">{error}</div>
           ) : null}
+          <div className="mx-4 mt-3 sm:mx-6">
+            <a
+              href="tel:9152987821"
+              className="inline-block rounded-2xl bg-[#FF6B6B] px-4 py-2 text-xs font-semibold text-white transition hover:opacity-90"
+            >
+              Crisis Helpline (iCall): 9152987821
+            </a>
+          </div>
 
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4 sm:px-6">
             {loading ? (

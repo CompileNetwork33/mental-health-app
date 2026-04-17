@@ -13,15 +13,6 @@ import {
 } from 'recharts';
 import { createClient } from '@/lib/supabase/client';
 
-const navItems = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Mood Tracker', href: '/mood-tracker' },
-  { label: 'Journal', href: '/journal' },
-  { label: 'Chat with AI', href: '/chat' },
-  { label: 'Profile', href: '/profile' },
-  { label: 'Login', href: '/login' },
-];
-
 const moodScoreMap = {
   VeryLow: 1,
   Low: 2,
@@ -144,23 +135,8 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-violet-100 via-amber-50 to-emerald-100 text-slate-800">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 p-4 md:flex-row md:gap-6 md:p-6">
-        <aside className="rounded-3xl border border-white/80 bg-white/80 p-4 shadow-lg backdrop-blur md:sticky md:top-6 md:h-fit md:w-64">
-          <h2 className="mb-4 text-lg font-semibold text-violet-700">Mental Health Companion</h2>
-          <nav className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="rounded-2xl bg-violet-50 px-3 py-2 text-sm font-medium text-violet-700 transition hover:bg-violet-100"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </aside>
-
-        <section className="flex-1 space-y-4 md:space-y-6">
+      <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6">
+        <section className="space-y-4 md:space-y-6">
           <header className="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg backdrop-blur">
             <p className="text-sm font-medium text-emerald-700">Welcome back</p>
             <h1 className="mt-1 text-2xl font-semibold md:text-3xl">Hi {userName}, how are you feeling today?</h1>
