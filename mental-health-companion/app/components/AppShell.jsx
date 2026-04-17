@@ -74,10 +74,6 @@ export default function AppShell({ children }) {
     loadUser();
   }, [hideShell, supabase]);
 
-  useEffect(() => {
-    setSidebarOpen(false);
-  }, [pathname]);
-
   async function handleLogout() {
     await supabase.auth.signOut();
     router.push('/login');
@@ -164,6 +160,7 @@ export default function AppShell({ children }) {
                 <Link
                   key={link.href}
                   href={link.href}
+                  onClick={() => setSidebarOpen(false)}
                   className={`flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition ${
                     active ? 'bg-[#00BFA5] text-white' : 'text-[#1A1A2E] hover:bg-[#EAF9F6]'
                   }`}

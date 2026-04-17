@@ -125,6 +125,7 @@ export default function ProfilePage() {
   }, [supabase]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadProfileData();
   }, [loadProfileData]);
 

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/client.js';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -14,6 +14,7 @@ export default function SignupPage() {
     password: '',
   });
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   function handleChange(event) {
@@ -27,53 +28,76 @@ export default function SignupPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError('');
+    setMessage('');
     setLoading(true);
 
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
       options: {
         data: {
           name: formData.name,
         },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
     if (signUpError) {
-      setError(signUpError.message);
+      setError(signUpError.message || 'Could not create account.');
       setLoading(false);
       return;
     }
+
+    const signedUpUserId = signUpData?.user?.id;
+    if (signedUpUserId) {
+      const { error: profileError } = await supabase.from('profiles').upsert(
+        {
+          id: signedUpUserId,
+          full_name: formData.name.trim(),
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+        },
+        { onConflict: 'id' }
+      );
+
+      if (profileError) {
+        setError(profileError.message || 'Account created, but profile setup failed.');
+        setLoading(false);
+        return;
+      }
+    }
+
+    setMessage('Account created successfully. Redirecting to login...');
 
     router.push('/login');
     router.refresh();
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-100 via-white to-violet-100 px-4 py-10">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F5F7FA] px-4 py-10">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute right-[-4rem] top-10 h-44 w-44 rounded-full bg-violet-200/60 blur-3xl sm:h-60 sm:w-60" />
-        <div className="absolute bottom-6 left-[-3rem] h-48 w-48 rounded-full bg-emerald-200/70 blur-3xl sm:h-64 sm:w-64" />
+        <div className="absolute right-[-4rem] top-10 h-44 w-44 rounded-full bg-[#1A73E8]/20 blur-3xl sm:h-60 sm:w-60" />
+        <div className="absolute bottom-6 left-[-3rem] h-48 w-48 rounded-full bg-[#00BFA5]/20 blur-3xl sm:h-64 sm:w-64" />
       </div>
 
       <section className="relative z-10 w-full max-w-md rounded-[2rem] border border-white/70 bg-white/85 p-6 shadow-[0_20px_60px_rgba(148,163,184,0.18)] backdrop-blur-xl sm:p-8">
         <div className="mb-8 text-center">
-          <span className="inline-flex rounded-full bg-emerald-100 px-4 py-1 text-sm font-medium text-emerald-700">
+          <span className="inline-flex rounded-full bg-[#E6F7F4] px-4 py-1 text-sm font-medium text-[#00BFA5]">
             Begin your journey
           </span>
-          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-800">
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-[#1A1A2E]">
             Create your account
           </h1>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
+          <p className="mt-3 text-sm leading-6 text-[#1A1A2E]/70">
             Save your reflections, track patterns, and build a gentle routine for your mental well-being.
           </p>
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Name</span>
+            <span className="mb-2 block text-sm font-medium text-[#1A1A2E]">Name</span>
             <input
-              className="w-full rounded-2xl border border-violet-100 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
+              className="w-full rounded-2xl border border-[#CFE4FF] bg-white px-4 py-3 text-[#1A1A2E] outline-none transition focus:border-[#1A73E8] focus:ring-4 focus:ring-[#EAF3FE]"
               type="text"
               name="name"
               value={formData.name}
@@ -85,9 +109,9 @@ export default function SignupPage() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Email</span>
+            <span className="mb-2 block text-sm font-medium text-[#1A1A2E]">Email</span>
             <input
-              className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-emerald-300 focus:ring-4 focus:ring-emerald-100"
+              className="w-full rounded-2xl border border-[#BFEAE3] bg-white px-4 py-3 text-[#1A1A2E] outline-none transition focus:border-[#00BFA5] focus:ring-4 focus:ring-[#E6F7F4]"
               type="email"
               name="email"
               value={formData.email}
@@ -99,9 +123,9 @@ export default function SignupPage() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Password</span>
+            <span className="mb-2 block text-sm font-medium text-[#1A1A2E]">Password</span>
             <input
-              className="w-full rounded-2xl border border-violet-100 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
+              className="w-full rounded-2xl border border-[#CFE4FF] bg-white px-4 py-3 text-[#1A1A2E] outline-none transition focus:border-[#1A73E8] focus:ring-4 focus:ring-[#EAF3FE]"
               type="password"
               name="password"
               value={formData.password}
@@ -117,19 +141,24 @@ export default function SignupPage() {
               {error}
             </p>
           ) : null}
+          {message ? (
+            <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+              {message}
+            </p>
+          ) : null}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-violet-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200 transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-2xl bg-gradient-to-r from-[#1A73E8] to-[#00BFA5] px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-[#CFE4FF] transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {loading ? 'Creating account...' : 'Sign up'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-600">
+        <p className="mt-6 text-center text-sm text-[#1A1A2E]/70">
           Already have an account?{' '}
-          <Link className="font-semibold text-emerald-700 transition hover:text-emerald-900" href="/login">
+          <Link className="font-semibold text-[#1A73E8] transition hover:text-[#1557AD]" href="/login">
             Log in
           </Link>
         </p>
