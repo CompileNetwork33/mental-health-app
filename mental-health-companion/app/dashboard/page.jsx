@@ -11,15 +11,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { createClient } from '@/lib/supabase/client';
-
-const moodScoreMap = {
-  VeryLow: 1,
-  Low: 2,
-  Neutral: 3,
-  Good: 4,
-  Great: 5,
-};
+import { createClient } from '@/lib/supabase/client.js';
 
 export default function DashboardPage() {
   const supabase = useMemo(() => createClient(), []);
@@ -59,63 +51,56 @@ export default function DashboardPage() {
         setUserName(profileData.full_name || profileData.name);
       }
 
-      // Try common table names to avoid hard failure if schema differs.
-      let moodResult = await supabase
-        .from('mood_entries')
-        .select('mood,created_at')
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+      sevenDaysAgo.setHours(0, 0, 0, 0);
+
+      const { data: moods, error: moodsError } = await supabase
+        .from('moods')
+        .select('id,mood,score,note,created_at')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(7);
+        .gte('created_at', sevenDaysAgo.toISOString())
+        .order('created_at', { ascending: true });
 
-      if (moodResult.error) {
-        moodResult = await supabase
-          .from('moods')
-          .select('mood,created_at')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(7);
+      if (moodsError) {
+        setError(moodsError.message);
+        setLoading(false);
+        return;
       }
 
-      const moods = moodResult?.data || [];
-      if (moods.length > 0) {
-        setTodayMood(moods[0].mood || 'Mood captured');
-        const formattedMood = [...moods]
-          .reverse()
-          .map((item) => ({
-            day: new Date(item.created_at).toLocaleDateString('en-US', { weekday: 'short' }),
-            score: moodScoreMap[item.mood] || 3,
-            mood: item.mood,
-          }));
-        setWeeklyMoodData(formattedMood);
-      } else {
-        setWeeklyMoodData([
-          { day: 'Mon', score: 0, mood: 'No data' },
-          { day: 'Tue', score: 0, mood: 'No data' },
-          { day: 'Wed', score: 0, mood: 'No data' },
-          { day: 'Thu', score: 0, mood: 'No data' },
-          { day: 'Fri', score: 0, mood: 'No data' },
-          { day: 'Sat', score: 0, mood: 'No data' },
-          { day: 'Sun', score: 0, mood: 'No data' },
-        ]);
-      }
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const todayEnd = new Date(todayStart);
+      todayEnd.setDate(todayEnd.getDate() + 1);
 
-      let journalResult = await supabase
-        .from('journal_entries')
+      const todayMoodEntry = (moods || []).find((item) => {
+        const date = new Date(item.created_at);
+        return date >= todayStart && date < todayEnd;
+      });
+      setTodayMood(todayMoodEntry ? `${todayMoodEntry.mood} (Score: ${todayMoodEntry.score})` : 'No mood logged today');
+
+      setWeeklyMoodData(
+        (moods || []).map((item) => ({
+          day: new Date(item.created_at).toLocaleDateString('en-US', { weekday: 'short' }),
+          score: item.score ?? 3,
+          mood: item.mood,
+        }))
+      );
+
+      const { data: journals, error: journalsError } = await supabase
+        .from('journals')
         .select('id,title,content,created_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(3);
 
-      if (journalResult.error) {
-        journalResult = await supabase
-          .from('journals')
-          .select('id,title,content,created_at')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(3);
+      if (journalsError) {
+        setError(journalsError.message);
+        setLoading(false);
+        return;
       }
 
-      setJournalEntries(journalResult?.data || []);
+      setJournalEntries(journals || []);
       setLoading(false);
     }
 
@@ -124,9 +109,9 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-violet-100 via-amber-50 to-emerald-100 px-4">
-        <div className="w-full max-w-sm rounded-3xl border border-white/70 bg-white/80 p-8 text-center shadow-xl backdrop-blur">
-          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-violet-200 border-t-violet-500" />
+      <main className="flex min-h-screen items-center justify-center bg-[#F5F7FA] px-4">
+        <div className="w-full max-w-sm rounded-3xl border border-[#E6ECF5] bg-white p-8 text-center shadow-xl">
+          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-[#CFE4FF] border-t-[#1A73E8]" />
           <p className="text-slate-700">Loading your calm dashboard...</p>
         </div>
       </main>
@@ -134,30 +119,30 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-violet-100 via-amber-50 to-emerald-100 text-slate-800">
+    <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E]">
       <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6">
         <section className="space-y-4 md:space-y-6">
-          <header className="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg backdrop-blur">
-            <p className="text-sm font-medium text-emerald-700">Welcome back</p>
+          <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <p className="text-sm font-medium text-[#00BFA5]">Welcome back</p>
             <h1 className="mt-1 text-2xl font-semibold md:text-3xl">Hi {userName}, how are you feeling today?</h1>
             {error ? <p className="mt-3 rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p> : null}
           </header>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <article className="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg backdrop-blur">
-              <h3 className="text-lg font-semibold text-violet-700">Today&apos;s Mood Summary</h3>
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+              <h3 className="text-lg font-semibold text-[#1A73E8]">Today&apos;s Mood Summary</h3>
               <p className="mt-3 text-2xl font-bold text-slate-800">{todayMood}</p>
               <p className="mt-2 text-sm text-slate-600">Your daily check-ins help reveal emotional patterns.</p>
             </article>
 
-            <article className="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg backdrop-blur">
-              <h3 className="text-lg font-semibold text-emerald-700">Recent Journal Entries</h3>
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+              <h3 className="text-lg font-semibold text-[#00BFA5]">Recent Journal Entries</h3>
               <div className="mt-3 space-y-3">
                 {journalEntries.length === 0 ? (
                   <p className="text-sm text-slate-600">No journal entries yet. Start writing your first reflection.</p>
                 ) : (
                   journalEntries.map((entry) => (
-                    <div key={entry.id} className="rounded-2xl bg-amber-50 p-3">
+                    <div key={entry.id} className="rounded-2xl bg-[#F5F7FA] p-3">
                       <p className="font-medium text-slate-800">{entry.title || 'Untitled entry'}</p>
                       <p className="mt-1 line-clamp-2 text-sm text-slate-600">{entry.content || 'No content'}</p>
                     </div>
@@ -167,51 +152,55 @@ export default function DashboardPage() {
             </article>
           </div>
 
-          <article className="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg backdrop-blur">
-            <h3 className="text-lg font-semibold text-violet-700">Quick Actions</h3>
+          <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <h3 className="text-lg font-semibold text-[#1A73E8]">Quick Actions</h3>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               <Link
                 href="/mood-tracker"
-                className="rounded-2xl bg-gradient-to-r from-violet-500 to-violet-400 px-4 py-3 text-center text-sm font-semibold text-white"
+                className="rounded-2xl bg-gradient-to-r from-[#1A73E8] to-[#00BFA5] px-4 py-3 text-center text-sm font-semibold text-white"
               >
                 Track Mood
               </Link>
               <Link
                 href="/journal"
-                className="rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-400 px-4 py-3 text-center text-sm font-semibold text-white"
+                className="rounded-2xl bg-gradient-to-r from-[#00BFA5] to-[#1A73E8] px-4 py-3 text-center text-sm font-semibold text-white"
               >
                 Write Journal
               </Link>
               <Link
                 href="/chat"
-                className="rounded-2xl bg-gradient-to-r from-amber-500 to-orange-400 px-4 py-3 text-center text-sm font-semibold text-white"
+                className="rounded-2xl bg-gradient-to-r from-[#1A73E8] to-[#00BFA5] px-4 py-3 text-center text-sm font-semibold text-white"
               >
                 Chat with AI
               </Link>
             </div>
           </article>
 
-          <article className="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg backdrop-blur">
-            <h3 className="mb-4 text-lg font-semibold text-violet-700">Weekly Mood Trend</h3>
+          <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <h3 className="mb-4 text-lg font-semibold text-[#1A73E8]">Weekly Mood Trend</h3>
             <div className="h-72 w-full">
-              <ResponsiveContainer width="100%" height="100%">
+              {weeklyMoodData.length === 0 ? (
+                <p className="rounded-2xl bg-[#F5F7FA] p-4 text-sm text-slate-600">No mood data in the last 7 days yet.</p>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={weeklyMoodData} margin={{ top: 12, right: 16, left: 4, bottom: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ddd6fe" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#DCE6F2" />
                   <XAxis dataKey="day" stroke="#64748b" />
-                  <YAxis domain={[0, 5]} ticks={[0, 1, 2, 3, 4, 5]} stroke="#64748b" />
+                  <YAxis domain={[1, 5]} ticks={[1, 2, 3, 4, 5]} stroke="#64748b" />
                   <Tooltip />
                   <Line
                     type="monotone"
                     dataKey="score"
-                    stroke="#8b5cf6"
+                    stroke="#1A73E8"
                     strokeWidth={3}
-                    dot={{ r: 4, fill: '#10b981' }}
+                    dot={{ r: 4, fill: '#00BFA5' }}
                     activeDot={{ r: 6 }}
                   />
                 </LineChart>
-              </ResponsiveContainer>
+                </ResponsiveContainer>
+              )}
             </div>
-            <p className="mt-2 text-xs text-slate-500">Mood score: 1 (very low) to 5 (great)</p>
+            <p className="mt-2 text-xs text-slate-500">Mood score: 1 (very sad) to 5 (very happy)</p>
           </article>
         </section>
       </div>

@@ -52,7 +52,7 @@ export default function ProfilePage() {
   const [themePreference, setThemePreference] = useState('system');
 
   const [totalJournalEntries, setTotalJournalEntries] = useState(0);
-  const [daysTrackedMood, setDaysTrackedMood] = useState(0);
+  const [totalMoodEntries, setTotalMoodEntries] = useState(0);
   const [streakCounter, setStreakCounter] = useState(0);
 
   const [error, setError] = useState('');
@@ -112,13 +112,7 @@ export default function ProfilePage() {
 
     const { data: moodRows } = await supabase.from('moods').select('created_at').eq('user_id', user.id);
     const moodDates = (moodRows || []).map((row) => row.created_at);
-    const uniqueDays = new Set(
-      moodDates.map((date) => {
-        const d = new Date(date);
-        return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-      })
-    );
-    setDaysTrackedMood(uniqueDays.size);
+    setTotalMoodEntries(moodDates.length);
     setStreakCounter(calculateStreak(moodDates));
 
     setLoading(false);
@@ -327,8 +321,8 @@ export default function ProfilePage() {
                   <p className="mt-1 text-2xl font-bold text-[#1A73E8]">{totalJournalEntries}</p>
                 </div>
                 <div className="rounded-2xl bg-[#F5F7FA] p-4">
-                  <p className="text-xs text-[#1A1A2E]/70">Days tracked mood</p>
-                  <p className="mt-1 text-2xl font-bold text-[#00BFA5]">{daysTrackedMood}</p>
+                  <p className="text-xs text-[#1A1A2E]/70">Total mood entries</p>
+                  <p className="mt-1 text-2xl font-bold text-[#00BFA5]">{totalMoodEntries}</p>
                 </div>
                 <div className="rounded-2xl bg-[#FFF6E8] p-4">
                   <p className="text-xs text-[#1A1A2E]/70">Current streak</p>

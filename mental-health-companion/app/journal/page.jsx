@@ -136,11 +136,11 @@ export default function JournalPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-sky-100 via-violet-50 to-emerald-100 text-slate-800">
+    <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E]">
       <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6">
         <section className="space-y-4 md:space-y-6">
-          <header className="rounded-3xl border border-white/80 bg-white/85 p-6 shadow-lg backdrop-blur">
-            <h1 className="text-2xl font-semibold text-violet-700 md:text-3xl">Journal</h1>
+          <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <h1 className="text-2xl font-semibold text-[#1A73E8] md:text-3xl">Journal</h1>
             <p className="mt-2 text-sm text-slate-600">
               Write your thoughts, reflect on your day, and revisit your growth over time.
             </p>
@@ -153,8 +153,8 @@ export default function JournalPage() {
           </header>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <article className="rounded-3xl border border-white/80 bg-white/85 p-6 shadow-lg backdrop-blur">
-              <h2 className="text-lg font-semibold text-violet-700">New journal entry</h2>
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+              <h2 className="text-lg font-semibold text-[#1A73E8]">New journal entry</h2>
               <form onSubmit={handleSaveEntry} className="mt-4 space-y-4">
                 <div>
                   <label htmlFor="entry-title" className="mb-2 block text-sm font-medium text-slate-700">
@@ -166,7 +166,7 @@ export default function JournalPage() {
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
                     placeholder="Give this entry a title"
-                    className="w-full rounded-2xl border border-violet-200 bg-violet-50/60 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-violet-400 focus:bg-white"
+                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-[#1A73E8] focus:bg-white"
                   />
                 </div>
 
@@ -180,29 +180,29 @@ export default function JournalPage() {
                     onChange={(event) => setContent(event.target.value)}
                     placeholder="Write freely about how you are feeling..."
                     rows={10}
-                    className="w-full rounded-2xl border border-violet-200 bg-violet-50/60 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-violet-400 focus:bg-white"
+                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-[#1A73E8] focus:bg-white"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={saving}
-                  className="w-full rounded-2xl bg-gradient-to-r from-violet-500 to-indigo-500 px-4 py-3 text-sm font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
+                  className="w-full rounded-2xl bg-gradient-to-r from-[#1A73E8] to-[#00BFA5] px-4 py-3 text-sm font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {saving ? 'Saving entry...' : 'Save Entry'}
                 </button>
               </form>
             </article>
 
-            <article className="rounded-3xl border border-white/80 bg-white/85 p-6 shadow-lg backdrop-blur">
-              <h2 className="text-lg font-semibold text-emerald-700">Search entries</h2>
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+              <h2 className="text-lg font-semibold text-[#00BFA5]">Search entries</h2>
               <div className="mt-4">
                 <input
                   type="text"
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   placeholder="Search by title or content..."
-                  className="w-full rounded-2xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-emerald-400 focus:bg-white"
+                  className="w-full rounded-2xl border border-[#BFEAE3] bg-[#EEF9F7] px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-[#00BFA5] focus:bg-white"
                 />
               </div>
               <p className="mt-3 text-sm text-slate-600">
@@ -213,12 +213,12 @@ export default function JournalPage() {
             </article>
           </div>
 
-          <article className="rounded-3xl border border-white/80 bg-white/85 p-6 shadow-lg backdrop-blur">
-            <h2 className="text-lg font-semibold text-violet-700">Previous journal entries</h2>
+          <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <h2 className="text-lg font-semibold text-[#1A73E8]">Previous journal entries</h2>
 
             {loading ? (
-              <div className="mt-4 flex items-center gap-3 rounded-2xl bg-violet-50 p-4 text-sm text-slate-700">
-                <div className="h-5 w-5 animate-spin rounded-full border-2 border-violet-200 border-t-violet-500" />
+              <div className="mt-4 flex items-center gap-3 rounded-2xl bg-[#F5F7FA] p-4 text-sm text-slate-700">
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#CFE4FF] border-t-[#1A73E8]" />
                 Loading journal entries...
               </div>
             ) : filteredEntries.length === 0 ? (
@@ -232,7 +232,7 @@ export default function JournalPage() {
                 {filteredEntries.map((entry) => (
                   <li
                     key={entry.id}
-                    className="rounded-2xl border border-violet-100 bg-violet-50/80 p-4 text-sm text-slate-700"
+                    className="rounded-2xl border border-[#DCE6F2] bg-[#F5F7FA] p-4 text-sm text-slate-700"
                   >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div className="space-y-1">
@@ -244,7 +244,7 @@ export default function JournalPage() {
                         <button
                           type="button"
                           onClick={() => setSelectedEntry(entry)}
-                          className="rounded-xl bg-white px-3 py-2 text-xs font-medium text-violet-700 transition hover:bg-violet-100"
+                          className="rounded-xl bg-white px-3 py-2 text-xs font-medium text-[#1A73E8] transition hover:bg-[#EAF3FE]"
                         >
                           Read more
                         </button>
@@ -271,7 +271,7 @@ export default function JournalPage() {
           <div className="w-full max-w-2xl rounded-3xl border border-white/80 bg-white p-6 shadow-2xl">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="text-xl font-semibold text-violet-700">{selectedEntry.title || 'Untitled entry'}</h3>
+                <h3 className="text-xl font-semibold text-[#1A73E8]">{selectedEntry.title || 'Untitled entry'}</h3>
                 <p className="mt-1 text-xs text-slate-500">
                   {new Date(selectedEntry.created_at).toLocaleString()}
                 </p>
@@ -284,7 +284,7 @@ export default function JournalPage() {
                 Close
               </button>
             </div>
-            <div className="mt-4 max-h-[60vh] overflow-y-auto rounded-2xl bg-violet-50 p-4 text-sm leading-relaxed text-slate-700">
+            <div className="mt-4 max-h-[60vh] overflow-y-auto rounded-2xl bg-[#F5F7FA] p-4 text-sm leading-relaxed text-slate-700">
               {selectedEntry.content}
             </div>
           </div>
