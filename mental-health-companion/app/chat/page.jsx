@@ -9,6 +9,7 @@ const navItems = [
   { label: 'Mood Tracker', href: '/mood-tracker' },
   { label: 'Journal', href: '/journal' },
   { label: 'Chat with AI', href: '/chat' },
+  { label: 'Profile', href: '/profile' },
 ];
 
 const serenityGreeting = {
