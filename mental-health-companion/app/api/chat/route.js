@@ -1,53 +1,45 @@
 import { NextResponse } from 'next/server';
 
-const systemPrompt = `You are Serenity, a compassionate mental health companion. You listen carefully, show empathy, and provide supportive responses. Never give medical advice. Always be warm and caring.`;
-
-export async function POST(request) {
+export async function POST(req) {
   try {
-    const { messages } = await request.json();
-
-    if (!Array.isArray(messages) || messages.length === 0) {
-      return NextResponse.json({ error: 'Messages are required.' }, { status: 400 });
-    }
-
-    const apiKey = process.env.GROK_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json({ error: 'Missing GROK_API_KEY.' }, { status: 500 });
-    }
+    const { messages } = await req.json();
 
     const response = await fetch('https://api.x.ai/v1/chat/completions', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.GROK_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'grok-2-latest',
+        model: 'grok-beta',
         messages: [
-          { role: 'system', content: systemPrompt },
-          ...messages.map((msg) => ({
-            role: msg.role === 'assistant' ? 'assistant' : 'user',
-            content: String(msg.content || ''),
-          })),
+          {
+            role: 'system',
+            content: 'You are Serenity, a compassionate mental health companion. You listen carefully, show empathy, and provide supportive, caring responses. Never give medical advice. Always be warm, kind and understanding. If someone is in crisis suggest helpline: iCall 9152987821'
+          },
+          ...messages
         ],
-      }),
+        max_tokens: 500,
+        temperature: 0.7
+      })
     });
 
     const data = await response.json();
+    
     if (!response.ok) {
-      return NextResponse.json(
-        { error: data?.error?.message || 'Failed to get response from Grok.' },
-        { status: response.status }
-      );
+      console.error('Grok API Error:', data);
+      return NextResponse.json({ error: data }, { status: 400 });
     }
 
-    const reply = data?.choices?.[0]?.message?.content;
-    if (!reply) {
-      return NextResponse.json({ error: 'No reply from Grok.' }, { status: 502 });
-    }
+    return NextResponse.json({ 
+      message: data.choices[0].message.content 
+    });
 
-    return NextResponse.json({ reply });
-  } catch {
-    return NextResponse.json({ error: 'Unexpected server error.' }, { status: 500 });
+  } catch (error) {
+    console.error('Server Error:', error);
+    return NextResponse.json(
+      { error: 'Something went wrong' }, 
+      { status: 500 }
+    );
   }
 }

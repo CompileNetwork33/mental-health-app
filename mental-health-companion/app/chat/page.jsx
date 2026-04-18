@@ -139,23 +139,52 @@ export default function ChatPage() {
     }
   }
 
+  async function handleClearChat() {
+    if (!userId) return;
+    
+    try {
+      const { error } = await supabase
+        .from('chats')
+        .delete()
+        .eq('user_id', userId);
+      
+      if (error) {
+        setError('Failed to clear chat history.');
+        return;
+      }
+      
+      setMessages([serenityGreeting]);
+    } catch (clearError) {
+      setError('Something went wrong while clearing chat.');
+    }
+  }
+
   return (
-    <main className="min-h-screen bg-[#FFF9F5] text-[#2D2D2D]">
+    <main className="min-h-screen bg-[#F5F7FA] text-[#2D2D2D]">
       <div className="mx-auto w-full max-w-6xl">
-        <section className="flex h-[calc(100vh-7rem)] min-h-[600px] flex-1 flex-col rounded-3xl border border-[#FFE8DC] bg-[#FFE8DC] shadow-md">
-          <header className="flex items-center justify-between rounded-t-3xl border-b border-[#FFD93D] bg-[#FFF9F5] px-4 py-4 sm:px-6">
+        <section className="flex h-[calc(100vh-7rem)] min-h-[600px] flex-1 flex-col rounded-3xl border border-[#E1E8ED] bg-white shadow-md">
+          <header className="flex items-center justify-between rounded-t-3xl border-b border-[#E1E8ED] bg-[#F5F7FA] px-4 py-4 sm:px-6">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#6B4EFF] text-lg text-white">
-                🌸
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#00BFA5] text-lg text-white">
+                �
               </div>
               <div>
                 <h1 className="text-lg font-semibold text-[#2D2D2D]">Serenity</h1>
-                <p className="text-xs text-[#6B4EFF]">Compassionate AI Companion</p>
+                <p className="text-xs text-[#00BFA5]">Compassionate AI Companion</p>
               </div>
             </div>
-            <span className="rounded-full bg-[#FFD93D] px-3 py-1 text-xs font-medium text-[#2D2D2D]">
-              Safe Space
-            </span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleClearChat}
+                disabled={!userId || loading}
+                className="rounded-full bg-[#1A73E8] px-3 py-1 text-xs font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Clear Chat
+              </button>
+              <span className="rounded-full bg-[#00BFA5] px-3 py-1 text-xs font-medium text-white">
+                Safe Space
+              </span>
+            </div>
           </header>
 
           {error ? (
@@ -164,7 +193,7 @@ export default function ChatPage() {
           <div className="mx-4 mt-3 sm:mx-6">
             <a
               href="tel:9152987821"
-              className="inline-block rounded-2xl bg-[#FF6B6B] px-4 py-2 text-xs font-semibold text-white transition hover:opacity-90"
+              className="inline-block rounded-2xl bg-[#1A73E8] px-4 py-2 text-xs font-semibold text-white transition hover:opacity-90"
             >
               Crisis Helpline (iCall): 9152987821
             </a>
@@ -181,12 +210,12 @@ export default function ChatPage() {
                     <div
                       className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-sm sm:max-w-[75%] ${
                         isUser
-                          ? 'rounded-br-md bg-[#6B4EFF] text-white'
-                          : 'rounded-bl-md bg-white text-[#2D2D2D]'
+                          ? 'rounded-br-md bg-[#1A73E8] text-white'
+                          : 'rounded-bl-md bg-[#00BFA5] text-white'
                       }`}
                     >
                       <p className="whitespace-pre-wrap">{msg.message}</p>
-                      <p className={`mt-1 text-[10px] ${isUser ? 'text-violet-200' : 'text-slate-500'}`}>
+                      <p className={`mt-1 text-[10px] ${isUser ? 'text-blue-100' : 'text-teal-100'}`}>
                         {new Date(msg.created_at).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit',
@@ -200,11 +229,11 @@ export default function ChatPage() {
 
             {typing ? (
               <div className="flex justify-start">
-                <div className="rounded-2xl rounded-bl-md bg-white px-4 py-3 text-sm text-[#2D2D2D] shadow-sm">
+                <div className="rounded-2xl rounded-bl-md bg-[#00BFA5] px-4 py-3 text-sm text-white shadow-sm">
                   <div className="flex items-center gap-1">
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-[#FF6B6B]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-[#FF6B6B] [animation-delay:0.15s]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-[#FF6B6B] [animation-delay:0.3s]" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-white" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:0.15s]" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:0.3s]" />
                   </div>
                 </div>
               </div>
@@ -213,7 +242,7 @@ export default function ChatPage() {
 
           <form
             onSubmit={handleSend}
-            className="rounded-b-3xl border-t border-[#FFD93D] bg-[#FFF9F5] p-4 sm:p-6"
+            className="rounded-b-3xl border-t border-[#E1E8ED] bg-[#F5F7FA] p-4 sm:p-6"
           >
             <div className="flex items-end gap-2">
               <textarea
@@ -221,12 +250,12 @@ export default function ChatPage() {
                 onChange={(event) => setInput(event.target.value)}
                 placeholder="Share what is on your mind..."
                 rows={2}
-                className="min-h-[52px] flex-1 resize-none rounded-2xl border border-[#FFE8DC] bg-white px-4 py-3 text-sm text-[#2D2D2D] outline-none transition placeholder:text-slate-500 focus:border-[#6B4EFF]"
+                className="min-h-[52px] flex-1 resize-none rounded-2xl border border-[#E1E8ED] bg-white px-4 py-3 text-sm text-[#2D2D2D] outline-none transition placeholder:text-slate-500 focus:border-[#1A73E8]"
               />
               <button
                 type="submit"
                 disabled={sending || !input.trim() || !userId}
-                className="rounded-2xl bg-[#6B4EFF] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-2xl bg-[#1A73E8] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {sending ? 'Sending...' : 'Send'}
               </button>
