@@ -43,12 +43,12 @@ export default function DashboardPage() {
 
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('name,full_name')
+        .select('name')
         .eq('id', user.id)
         .maybeSingle();
 
-      if (profileData?.full_name || profileData?.name) {
-        setUserName(profileData.full_name || profileData.name);
+      if (profileData?.name) {
+        setUserName(profileData.name);
       }
 
       const sevenDaysAgo = new Date();
@@ -183,20 +183,20 @@ export default function DashboardPage() {
                 <p className="rounded-2xl bg-[#F5F7FA] p-4 text-sm text-slate-600">No mood data in the last 7 days yet.</p>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={weeklyMoodData} margin={{ top: 12, right: 16, left: 4, bottom: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#DCE6F2" />
-                  <XAxis dataKey="day" stroke="#64748b" />
-                  <YAxis domain={[1, 5]} ticks={[1, 2, 3, 4, 5]} stroke="#64748b" />
-                  <Tooltip />
-                  <Line
-                    type="monotone"
-                    dataKey="score"
-                    stroke="#1A73E8"
-                    strokeWidth={3}
-                    dot={{ r: 4, fill: '#00BFA5' }}
-                    activeDot={{ r: 6 }}
-                  />
-                </LineChart>
+                  <LineChart data={weeklyMoodData} margin={{ top: 12, right: 16, left: 4, bottom: 8 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#DCE6F2" />
+                    <XAxis dataKey="day" stroke="#64748b" />
+                    <YAxis domain={[1, 5]} ticks={[1, 2, 3, 4, 5]} stroke="#64748b" />
+                    <Tooltip />
+                    <Line
+                      type="monotone"
+                      dataKey="score"
+                      stroke="#1A73E8"
+                      strokeWidth={3}
+                      dot={{ r: 4, fill: '#00BFA5' }}
+                      activeDot={{ r: 6 }}
+                    />
+                  </LineChart>
                 </ResponsiveContainer>
               )}
             </div>

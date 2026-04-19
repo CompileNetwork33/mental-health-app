@@ -44,7 +44,7 @@ export default function ProfilePage() {
   const [userId, setUserId] = useState('');
 
   const [email, setEmail] = useState('');
-  const [fullName, setFullName] = useState('');
+  const [name, setName] = useState('');
   const [bio, setBio] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [dailyReminder, setDailyReminder] = useState(false);
@@ -78,7 +78,7 @@ export default function ProfilePage() {
 
     const { data: profileData, error: profileError } = await supabase
       .from('profiles')
-      .select('full_name,name,bio,avatar_url,daily_reminder,notification_preference,theme_preference')
+      .select('name,bio,avatar_url,daily_reminder,notification_preference,theme_preference')
       .eq('id', user.id)
       .maybeSingle();
 
@@ -89,14 +89,14 @@ export default function ProfilePage() {
     }
 
     if (profileData) {
-      setFullName(profileData.full_name || profileData.name || '');
+      setName(profileData.name || '');
       setBio(profileData.bio || '');
       setAvatarUrl(profileData.avatar_url || '');
       setDailyReminder(Boolean(profileData.daily_reminder));
       setNotificationPreference(profileData.notification_preference || 'all');
       setThemePreference(profileData.theme_preference || 'system');
     } else {
-      setFullName(user.user_metadata?.name || '');
+      setName(user.user_metadata?.name || '');
       setBio('');
       setAvatarUrl('');
       setDailyReminder(false);
@@ -161,8 +161,7 @@ export default function ProfilePage() {
 
     const payload = {
       id: userId,
-      full_name: fullName.trim(),
-      name: fullName.trim(),
+      name: name.trim(),
       bio: bio.trim(),
       avatar_url: avatarUrl,
       daily_reminder: dailyReminder,
@@ -245,7 +244,7 @@ export default function ProfilePage() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
                     ) : (
-                      (fullName?.charAt(0) || email?.charAt(0) || 'U').toUpperCase()
+                      (name?.charAt(0) || email?.charAt(0) || 'U').toUpperCase()
                     )}
                   </div>
                   <div>
@@ -269,8 +268,8 @@ export default function ProfilePage() {
                   <input
                     id="full-name"
                     type="text"
-                    value={fullName}
-                    onChange={(event) => setFullName(event.target.value)}
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
                     placeholder="Your full name"
                     className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm outline-none transition focus:border-[#1A73E8]"
                   />
@@ -341,14 +340,12 @@ export default function ProfilePage() {
                   <button
                     type="button"
                     onClick={() => setDailyReminder((current) => !current)}
-                    className={`h-8 w-14 rounded-full p-1 transition ${
-                      dailyReminder ? 'bg-[#00BFA5]' : 'bg-slate-300'
-                    }`}
+                    className={`h-8 w-14 rounded-full p-1 transition ${dailyReminder ? 'bg-[#00BFA5]' : 'bg-slate-300'
+                      }`}
                   >
                     <span
-                      className={`block h-6 w-6 rounded-full bg-white transition ${
-                        dailyReminder ? 'translate-x-6' : 'translate-x-0'
-                      }`}
+                      className={`block h-6 w-6 rounded-full bg-white transition ${dailyReminder ? 'translate-x-6' : 'translate-x-0'
+                        }`}
                     />
                   </button>
                 </label>

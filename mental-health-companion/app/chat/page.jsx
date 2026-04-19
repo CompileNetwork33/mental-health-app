@@ -122,10 +122,14 @@ export default function ChatPage() {
         throw new Error(data.error || 'Failed to get Serenity response.');
       }
 
+      const aiResponse = typeof data.message === 'string' 
+        ? data.message 
+        : JSON.stringify(data.message);
+
       const assistantMessage = {
         id: `assistant-${Date.now()}`,
         role: 'assistant',
-        message: data.reply || 'I am here with you.',
+        message: aiResponse || 'I am here with you.',
         created_at: new Date().toISOString(),
       };
 

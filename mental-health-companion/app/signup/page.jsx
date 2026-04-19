@@ -31,14 +31,13 @@ export default function SignupPage() {
     setMessage('');
     setLoading(true);
 
-    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+    const { error: signUpError } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
       options: {
         data: {
           name: formData.name,
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
@@ -48,29 +47,12 @@ export default function SignupPage() {
       return;
     }
 
-    const signedUpUserId = signUpData?.user?.id;
-    if (signedUpUserId) {
-      const { error: profileError } = await supabase.from('profiles').upsert(
-        {
-          id: signedUpUserId,
-          full_name: formData.name.trim(),
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-        },
-        { onConflict: 'id' }
-      );
-
-      if (profileError) {
-        setError(profileError.message || 'Account created, but profile setup failed.');
-        setLoading(false);
-        return;
-      }
-    }
-
-    setMessage('Account created successfully. Redirecting to login...');
-
-    router.push('/login');
-    router.refresh();
+    setMessage('Account created successfully! Please check your email to verify your account.');
+    
+    setTimeout(() => {
+      router.push('/login');
+      router.refresh();
+    }, 2000);
   }
 
   return (

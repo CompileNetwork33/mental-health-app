@@ -59,12 +59,12 @@ export default function AppShell({ children }) {
 
       const { data } = await supabase
         .from('profiles')
-        .select('full_name,name,avatar_url')
+        .select('name,avatar_url')
         .eq('id', user.id)
         .maybeSingle();
 
-      if (data?.full_name || data?.name) {
-        setUserName(data.full_name || data.name);
+      if (data?.name) {
+        setUserName(data.name);
       }
       if (data?.avatar_url) {
         setAvatarUrl(data.avatar_url);
@@ -129,16 +129,14 @@ export default function AppShell({ children }) {
 
       <div className="mx-auto flex w-full max-w-7xl">
         <div
-          className={`fixed inset-0 z-40 bg-black/30 transition lg:hidden ${
-            sidebarOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
-          }`}
+          className={`fixed inset-0 z-40 bg-black/30 transition lg:hidden ${sidebarOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+            }`}
           onClick={() => setSidebarOpen(false)}
         />
 
         <aside
-          className={`fixed left-0 top-0 z-50 h-full w-72 border-r border-[#DCE6F2] bg-white p-4 shadow-xl transition-transform lg:sticky lg:top-16 lg:z-10 lg:h-[calc(100vh-4rem)] lg:translate-x-0 lg:shadow-none ${
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+          className={`fixed left-0 top-0 z-50 h-full w-72 border-r border-[#DCE6F2] bg-white p-4 shadow-xl transition-transform lg:sticky lg:top-16 lg:z-10 lg:h-[calc(100vh-4rem)] lg:translate-x-0 lg:shadow-none ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
         >
           <div className="mb-4 flex items-center justify-between lg:hidden">
             <p className="text-base font-semibold text-[#1A73E8]">Menu</p>
@@ -161,9 +159,8 @@ export default function AppShell({ children }) {
                   key={link.href}
                   href={link.href}
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition ${
-                    active ? 'bg-[#00BFA5] text-white' : 'text-[#1A1A2E] hover:bg-[#EAF9F6]'
-                  }`}
+                  className={`flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition ${active ? 'bg-[#00BFA5] text-white' : 'text-[#1A1A2E] hover:bg-[#EAF9F6]'
+                    }`}
                 >
                   <Icon className="h-4 w-4" />
                   {link.label}
