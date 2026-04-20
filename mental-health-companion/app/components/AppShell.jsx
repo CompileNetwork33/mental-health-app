@@ -12,6 +12,7 @@ import {
   MessageCircle,
   Smile,
   User,
+  Wind,
   X,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client.js';
@@ -21,6 +22,7 @@ const navLinks = [
   { label: 'Mood Tracker', href: '/mood-tracker', icon: Smile },
   { label: 'Journal', href: '/journal', icon: BookOpen },
   { label: 'Chat with Serenity', href: '/chat', icon: MessageCircle },
+  { label: 'Breathing', href: '/breathing', icon: Wind },
   { label: 'Profile', href: '/profile', icon: User },
 ];
 
