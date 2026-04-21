@@ -144,7 +144,17 @@ export default function JournalPage() {
             <p className="mt-2 text-sm text-slate-600">
               Write your thoughts, reflect on your day, and revisit your growth over time.
             </p>
-            {error ? <p className="mt-4 rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p> : null}
+            {error ? (
+              <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-4">
+                <p className="text-sm text-red-700 font-medium mb-2">{error}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-lg hover:bg-red-200 transition-colors"
+                >
+                  Refresh Page
+                </button>
+              </div>
+            ) : null}
             {successMessage ? (
               <p className="mt-4 rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
                 {successMessage}
@@ -222,11 +232,29 @@ export default function JournalPage() {
                 Loading journal entries...
               </div>
             ) : filteredEntries.length === 0 ? (
-              <p className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
-                {search.trim()
-                  ? 'No entries match your search.'
-                  : 'No journal entries yet. Write your first one above.'}
-              </p>
+              <div className="mt-4 rounded-2xl bg-[#F5F7FA] border border-[#E6ECF5] p-8 text-center">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#EAF3FE] flex items-center justify-center">
+                  <svg className="w-8 h-8 text-[#1A73E8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-[#1A73E8] mb-2">
+                  {search.trim() ? 'No matching entries' : 'Start your journal journey'}
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  {search.trim()
+                    ? 'Try adjusting your search terms to find what you\'re looking for.'
+                    : 'Your first journal entry is waiting to be written. Share your thoughts and feelings above.'}
+                </p>
+                {!search.trim() && (
+                  <div className="inline-flex items-center gap-2 text-xs text-[#00BFA5] bg-[#E6F7F4] px-3 py-2 rounded-full">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    Begin your wellness journey
+                  </div>
+                )}
+              </div>
             ) : (
               <ul className="mt-4 space-y-3">
                 {filteredEntries.map((entry) => (
@@ -252,7 +280,7 @@ export default function JournalPage() {
                           type="button"
                           onClick={() => handleDeleteEntry(entry.id)}
                           disabled={deletingId === entry.id}
-                          className="rounded-xl bg-rose-100 px-3 py-2 text-xs font-medium text-rose-700 transition hover:bg-rose-200 disabled:cursor-not-allowed disabled:opacity-70"
+                          className="rounded-xl bg-red-100 px-3 py-2 text-xs font-medium text-red-700 transition hover:bg-red-200 disabled:cursor-not-allowed disabled:opacity-70"
                         >
                           {deletingId === entry.id ? 'Deleting...' : 'Delete'}
                         </button>

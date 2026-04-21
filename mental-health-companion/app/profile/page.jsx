@@ -228,7 +228,17 @@ export default function ProfilePage() {
             <p className="mt-2 text-sm text-[#1A1A2E]/80">
               Personalize your companion experience and manage your wellness preferences.
             </p>
-            {error ? <p className="mt-4 rounded-xl bg-rose-100 px-3 py-2 text-sm text-rose-700">{error}</p> : null}
+            {error ? (
+              <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-4">
+                <p className="text-sm text-red-700 font-medium mb-2">{error}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-lg hover:bg-red-200 transition-colors"
+                >
+                  Refresh Page
+                </button>
+              </div>
+            ) : null}
             {successMessage ? (
               <p className="mt-4 rounded-xl bg-emerald-100 px-3 py-2 text-sm text-emerald-700">{successMessage}</p>
             ) : null}

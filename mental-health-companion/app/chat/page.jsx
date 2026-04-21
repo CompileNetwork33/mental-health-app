@@ -192,7 +192,15 @@ export default function ChatPage() {
           </header>
 
           {error ? (
-            <div className="mx-4 mt-4 rounded-xl bg-rose-100 px-3 py-2 text-sm text-rose-700 sm:mx-6">{error}</div>
+            <div className="mx-4 mt-4 rounded-xl bg-red-50 border border-red-200 p-4 sm:mx-6">
+              <p className="text-sm text-red-700 font-medium mb-2">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-lg hover:bg-red-200 transition-colors"
+              >
+                Refresh Page
+              </button>
+            </div>
           ) : null}
           <div className="mx-4 mt-3 sm:mx-6">
             <a
@@ -206,6 +214,16 @@ export default function ChatPage() {
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4 sm:px-6">
             {loading ? (
               <div className="rounded-2xl bg-white p-4 text-sm text-[#2D2D2D]">Loading your chat history...</div>
+            ) : messages.length <= 1 ? (
+              <div className="rounded-2xl bg-[#F5F7FA] border border-[#E6ECF5] p-6 text-center">
+                <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#EAF3FE] flex items-center justify-center">
+                  <svg className="w-6 h-6 text-[#1A73E8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <h3 className="text-base font-semibold text-[#1A73E8] mb-2">Start your conversation</h3>
+                <p className="text-sm text-gray-600">I'm here to listen and support you. Share what's on your mind and I'll help you work through it.</p>
+              </div>
             ) : (
               messages.map((msg) => {
                 const isUser = msg.role === 'user';

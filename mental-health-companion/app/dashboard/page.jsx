@@ -33,7 +33,7 @@ export default function DashboardPage() {
       } = await supabase.auth.getUser();
 
       if (userError || !user) {
-        setError(userError?.message || 'Could not load user details.');
+        setError(userError?.message || 'Unable to load your profile. Please check your internet connection and try again.');
         setLoading(false);
         return;
       }
@@ -63,7 +63,7 @@ export default function DashboardPage() {
         .order('created_at', { ascending: true });
 
       if (moodsError) {
-        setError(moodsError.message);
+        setError('Failed to load mood data. Please refresh the page to try again.');
         setLoading(false);
         return;
       }
@@ -95,7 +95,7 @@ export default function DashboardPage() {
         .limit(3);
 
       if (journalsError) {
-        setError(journalsError.message);
+        setError('Failed to load journal entries. Please refresh the page to try again.');
         setLoading(false);
         return;
       }
@@ -109,10 +109,45 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#F5F7FA] px-4">
-        <div className="w-full max-w-sm rounded-3xl border border-[#E6ECF5] bg-white p-8 text-center shadow-xl">
-          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-[#CFE4FF] border-t-[#1A73E8]" />
-          <p className="text-slate-700">Loading your calm dashboard...</p>
+      <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E]">
+        <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6 p-4 md:p-6">
+          {/* Header Skeleton */}
+          <div className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <div className="h-4 w-32 bg-gray-200 rounded animate-pulse mb-2" />
+            <div className="h-8 w-48 bg-gray-200 rounded animate-pulse" />
+          </div>
+
+          {/* Stats Cards Skeleton */}
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+              <div className="h-6 w-32 bg-gray-200 rounded animate-pulse mb-4" />
+              <div className="h-8 w-24 bg-gray-200 rounded animate-pulse mb-2" />
+              <div className="h-4 w-40 bg-gray-200 rounded animate-pulse" />
+            </div>
+            <div className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+              <div className="h-6 w-40 bg-gray-200 rounded animate-pulse mb-4" />
+              <div className="space-y-3">
+                <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+                <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Actions Skeleton */}
+          <div className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <div className="h-6 w-32 bg-gray-200 rounded animate-pulse mb-4" />
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="h-12 bg-gray-200 rounded-2xl animate-pulse" />
+              <div className="h-12 bg-gray-200 rounded-2xl animate-pulse" />
+              <div className="h-12 bg-gray-200 rounded-2xl animate-pulse" />
+            </div>
+          </div>
+
+          {/* Chart Skeleton */}
+          <div className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <div className="h-6 w-40 bg-gray-200 rounded animate-pulse mb-4" />
+            <div className="h-72 w-full bg-gray-200 rounded-2xl animate-pulse" />
+          </div>
         </div>
       </main>
     );
@@ -120,12 +155,22 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E]">
-      <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6">
+      <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6 p-4 md:p-6">
         <section className="space-y-4 md:space-y-6">
           <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
             <p className="text-sm font-medium text-[#00BFA5]">Welcome back</p>
             <h1 className="mt-1 text-2xl font-semibold md:text-3xl">Hi {userName}, how are you feeling today?</h1>
-            {error ? <p className="mt-3 rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p> : null}
+            {error ? (
+              <div className="mt-3 rounded-xl bg-red-50 border border-red-200 p-4">
+                <p className="text-sm text-red-700 font-medium mb-2">{error}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-lg hover:bg-red-200 transition-colors"
+                >
+                  Refresh Page
+                </button>
+              </div>
+            ) : null}
           </header>
 
           <div className="grid gap-4 lg:grid-cols-2">

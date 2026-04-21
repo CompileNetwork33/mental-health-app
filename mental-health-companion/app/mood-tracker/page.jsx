@@ -184,7 +184,17 @@ export default function MoodTrackerPage() {
             <p className="mt-2 text-sm text-slate-600">
               Track how you feel each day and discover patterns in your emotional wellbeing.
             </p>
-            {error ? <p className="mt-4 rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p> : null}
+            {error ? (
+              <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-4">
+                <p className="text-sm text-red-700 font-medium mb-2">{error}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-lg hover:bg-red-200 transition-colors"
+                >
+                  Refresh Page
+                </button>
+              </div>
+            ) : null}
             {successMessage ? (
               <p className="mt-4 rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
                 {successMessage}
@@ -263,7 +273,21 @@ export default function MoodTrackerPage() {
           <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
             <h2 className="text-lg font-semibold text-[#1A73E8]">Last 7 days mood history</h2>
             {history.length === 0 ? (
-              <p className="mt-3 text-sm text-slate-600">No history yet. Start by saving your first mood entry.</p>
+              <div className="mt-3 rounded-2xl bg-[#F5F7FA] border border-[#E6ECF5] p-6 text-center">
+                <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#EAF3FE] flex items-center justify-center">
+                  <svg className="w-6 h-6 text-[#1A73E8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h3 className="text-base font-semibold text-[#1A73E8] mb-2">No mood history yet</h3>
+                <p className="text-sm text-gray-600 mb-3">Start tracking your daily mood to see patterns and insights about your emotional wellbeing.</p>
+                <div className="inline-flex items-center gap-2 text-xs text-[#00BFA5] bg-[#E6F7F4] px-3 py-2 rounded-full">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  Track your first mood
+                </div>
+              </div>
             ) : (
               <ul className="mt-3 space-y-2">
                 {history.map((entry) => (
