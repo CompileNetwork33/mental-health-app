@@ -23,7 +23,7 @@ const breathingTechniques = {
     pattern: [5, 5],
     phases: ['Inhale', 'Exhale'],
     instructions: 'Breathe in deeply for 5 seconds, breathe out slowly for 5. Repeat.',
-    benefits: 'Calms the nervous system'
+    benefits: 'Calms nervous system'
   }
 };
 
@@ -106,7 +106,7 @@ export default function BreathingPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#F5F7FA] via-[#E8F4F8] to-[#F0F9FF]">
+    <main className="min-h-screen bg-[#F5F7FA]">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
@@ -125,8 +125,8 @@ export default function BreathingPage() {
               }}
               className={`p-6 rounded-2xl border-2 transition-all ${
                 selectedTechnique === key
-                  ? 'border-[#1A73E8] bg-white shadow-lg'
-                  : 'border-gray-200 bg-white hover:border-[#00BFA5]'
+                  ? 'border-[#1A73E8] bg-[#FFFFFF] shadow-lg'
+                  : 'border-gray-200 bg-[#FFFFFF] hover:border-[#00BFA5]'
               }`}
             >
               <div className="flex items-center gap-3 mb-3">
@@ -188,7 +188,7 @@ export default function BreathingPage() {
           ) : (
             <button
               onClick={stopBreathing}
-              className="flex items-center gap-2 px-8 py-3 bg-[#FFB347] text-white rounded-full hover:bg-[#FFA500] transition-colors shadow-lg"
+              className="flex items-center gap-2 px-8 py-3 bg-[#00BFA5] text-white rounded-full hover:bg-[#00A389] transition-colors shadow-lg"
             >
               <Pause className="w-5 h-5" />
               Stop
@@ -206,7 +206,7 @@ export default function BreathingPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl p-6 shadow-lg">
+          <div className="bg-[#FFFFFF] rounded-2xl p-6 shadow-lg">
             <h3 className="text-lg font-semibold text-[#1A73E8] mb-4">Current Technique</h3>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
@@ -224,7 +224,7 @@ export default function BreathingPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg">
+          <div className="bg-[#FFFFFF] rounded-2xl p-6 shadow-lg">
             <h3 className="text-lg font-semibold text-[#1A73E8] mb-4">Session Stats</h3>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
@@ -233,7 +233,7 @@ export default function BreathingPage() {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">Status:</span>
-                <span className={`font-medium ${isRunning ? 'text-[#FFB347]' : 'text-gray-500'}`}>
+                <span className={`font-medium ${isRunning ? 'text-[#00BFA5]' : 'text-gray-500'}`}>
                   {isRunning ? 'Active' : 'Paused'}
                 </span>
               </div>
@@ -242,7 +242,7 @@ export default function BreathingPage() {
         </div>
 
         {/* Instructions */}
-        <div className="mt-8 bg-white rounded-2xl p-6 shadow-lg">
+        <div className="mt-8 bg-[#FFFFFF] rounded-2xl p-6 shadow-lg">
           <h3 className="text-lg font-semibold text-[#1A73E8] mb-3">How to Use</h3>
           <ol className="space-y-2 text-gray-600">
             <li className="flex items-start gap-2">
