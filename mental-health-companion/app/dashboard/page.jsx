@@ -21,6 +21,7 @@ export default function DashboardPage() {
   const [todayMood, setTodayMood] = useState('No mood logged today');
   const [journalEntries, setJournalEntries] = useState([]);
   const [weeklyMoodData, setWeeklyMoodData] = useState([]);
+  const [streakCounter, setStreakCounter] = useState(0);
 
   useEffect(() => {
     async function loadDashboardData() {
@@ -51,16 +52,63 @@ export default function DashboardPage() {
         setUserName(profileData.name);
       }
 
+      // Get all moods for streak calculation
+      const { data: allMoods, error: moodsError } = await supabase
+        .from('moods')
+        .select('id,mood,score,note,created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      // Calculate streak
+      let streak = 0;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      if (allMoods && allMoods.length > 0) {
+        // Check if today has a mood entry
+        const todayMoodEntry = allMoods.find(item => {
+          const itemDate = new Date(item.created_at);
+          const itemDay = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate());
+          const todayDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+          return itemDay.getTime() === todayDay.getTime();
+        });
+
+        if (todayMoodEntry) {
+          streak = 1; // Today counts as day 1
+          
+          // Check consecutive days backwards
+          let checkDate = new Date(today);
+          checkDate.setDate(checkDate.getDate() - 1); // Start with yesterday
+          
+          for (let i = 1; i < 365; i++) { // Check up to a year
+            const checkDay = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
+            
+            const dayMoodEntry = allMoods.find(item => {
+              const itemDate = new Date(item.created_at);
+              const itemDay = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate());
+              return itemDay.getTime() === checkDay.getTime();
+            });
+            
+            if (dayMoodEntry) {
+              streak++;
+              checkDate.setDate(checkDate.getDate() - 1); // Move to previous day
+            } else {
+              break; // Streak broken
+            }
+          }
+        }
+      }
+      
+      setStreakCounter(streak);
+
+      // Get last 7 days for weekly chart
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
       sevenDaysAgo.setHours(0, 0, 0, 0);
 
-      const { data: moods, error: moodsError } = await supabase
-        .from('moods')
-        .select('id,mood,score,note,created_at')
-        .eq('user_id', user.id)
-        .gte('created_at', sevenDaysAgo.toISOString())
-        .order('created_at', { ascending: true });
+      const moods = allMoods?.filter(item => 
+        new Date(item.created_at) >= sevenDaysAgo
+      ) || [];
 
       if (moodsError) {
         setError('Failed to load mood data. Please refresh the page to try again.');
@@ -68,6 +116,7 @@ export default function DashboardPage() {
         return;
       }
 
+      // Get today's mood entry
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
       const todayEnd = new Date(todayStart);
@@ -181,18 +230,33 @@ export default function DashboardPage() {
             </article>
 
             <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
-              <h3 className="text-lg font-semibold text-[#00BFA5]">Recent Journal Entries</h3>
-              <div className="mt-3 space-y-3">
-                {journalEntries.length === 0 ? (
-                  <p className="text-sm text-slate-600">No journal entries yet. Start writing your first reflection.</p>
-                ) : (
-                  journalEntries.map((entry) => (
-                    <div key={entry.id} className="rounded-2xl bg-[#F5F7FA] p-3">
-                      <p className="font-medium text-slate-800">{entry.title || 'Untitled entry'}</p>
-                      <p className="mt-1 line-clamp-2 text-sm text-slate-600">{entry.content || 'No content'}</p>
-                    </div>
-                  ))
-                )}
+              <h3 className="text-lg font-semibold text-[#00BFA5]">Your Progress</h3>
+              <div className="mt-3 grid grid-cols-2 gap-4">
+                <div className="rounded-2xl bg-[#F5F7FA] p-3 text-center">
+                  <p className="text-xs text-slate-600">Current Streak</p>
+                  <p className="mt-1 text-2xl font-bold text-[#FFB347]">{streakCounter}</p>
+                  <p className="text-xs text-slate-500 mt-1">days</p>
+                </div>
+                <div className="rounded-2xl bg-[#F5F7FA] p-3 text-center">
+                  <p className="text-xs text-slate-600">Journal Entries</p>
+                  <p className="mt-1 text-2xl font-bold text-[#1A73E8]">{journalEntries.length}</p>
+                  <p className="text-xs text-slate-500 mt-1">total</p>
+                </div>
+              </div>
+              <div className="mt-4">
+                <h4 className="text-sm font-medium text-slate-700 mb-2">Recent Journal</h4>
+                <div className="space-y-2">
+                  {journalEntries.length === 0 ? (
+                    <p className="text-sm text-slate-600">No journal entries yet. Start writing your first reflection.</p>
+                  ) : (
+                    journalEntries.slice(0, 2).map((entry) => (
+                      <div key={entry.id} className="rounded-2xl bg-[#F5F7FA] p-3">
+                        <p className="font-medium text-slate-800 text-sm">{entry.title || 'Untitled entry'}</p>
+                        <p className="mt-1 line-clamp-2 text-xs text-slate-600">{entry.content || 'No content'}</p>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
             </article>
           </div>

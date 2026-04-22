@@ -4,32 +4,46 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createClient } from '@/lib/supabase/client.js';
 
-function calculateStreak(moodDates) {
-  const uniqueDays = Array.from(
-    new Set(
-      moodDates.map((date) => {
-        const d = new Date(date);
-        return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-      })
-    )
-  ).sort((a, b) => new Date(b) - new Date(a));
-
+function calculateStreak(allMoods) {
   let streak = 0;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  
+  if (allMoods && allMoods.length > 0) {
+    // Check if today has a mood entry
+    const todayMoodEntry = allMoods.find(item => {
+      const itemDate = new Date(item.created_at);
+      const itemDay = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate());
+      const todayDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      return itemDay.getTime() === todayDay.getTime();
+    });
 
-  for (let i = 0; i < uniqueDays.length; i += 1) {
-    const day = new Date(uniqueDays[i]);
-    day.setHours(0, 0, 0, 0);
-    const expected = new Date(today);
-    expected.setDate(today.getDate() - i);
-    if (day.getTime() === expected.getTime()) {
-      streak += 1;
-    } else {
-      break;
+    if (todayMoodEntry) {
+      streak = 1; // Today counts as day 1
+      
+      // Check consecutive days backwards
+      let checkDate = new Date(today);
+      checkDate.setDate(checkDate.getDate() - 1); // Start with yesterday
+      
+      for (let i = 1; i < 365; i++) { // Check up to a year
+        const checkDay = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
+        
+        const dayMoodEntry = allMoods.find(item => {
+          const itemDate = new Date(item.created_at);
+          const itemDay = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate());
+          return itemDay.getTime() === checkDay.getTime();
+        });
+        
+        if (dayMoodEntry) {
+          streak++;
+          checkDate.setDate(checkDate.getDate() - 1); // Move to previous day
+        } else {
+          break; // Streak broken
+        }
+      }
     }
   }
-
+  
   return streak;
 }
 
@@ -110,10 +124,15 @@ export default function ProfilePage() {
       .eq('user_id', user.id);
     setTotalJournalEntries(journalCount || 0);
 
-    const { data: moodRows } = await supabase.from('moods').select('created_at').eq('user_id', user.id);
-    const moodDates = (moodRows || []).map((row) => row.created_at);
-    setTotalMoodEntries(moodDates.length);
-    setStreakCounter(calculateStreak(moodDates));
+    // Get all moods for streak calculation
+    const { data: allMoods } = await supabase
+      .from('moods')
+      .select('id,created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false });
+    
+    setTotalMoodEntries(allMoods?.length || 0);
+    setStreakCounter(calculateStreak(allMoods || []));
 
     setLoading(false);
   }, [supabase]);
