@@ -274,13 +274,13 @@ export default function JournalPage() {
 
   return (
 
-    <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E]">
+    <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E] dark:bg-[#0a0a0a] dark:text-white">
 
       <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6">
 
         <section className="space-y-4 md:space-y-6">
 
-          <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+          <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
 
             <h1 className="text-2xl font-semibold text-[#1A73E8] md:text-3xl">Journal</h1>
 
@@ -328,7 +328,7 @@ export default function JournalPage() {
 
           <div className="grid gap-4 lg:grid-cols-2">
 
-            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
 
               <h2 className="text-lg font-semibold text-[#1A73E8]">New journal entry</h2>
 
@@ -336,7 +336,7 @@ export default function JournalPage() {
 
                 <div>
 
-                  <label htmlFor="entry-title" className="mb-2 block text-sm font-medium text-slate-700">
+                  <label htmlFor="entry-title" className="mb-2 block text-sm font-medium text-slate-700 dark:text-white">
 
                     Title
 
@@ -364,7 +364,7 @@ export default function JournalPage() {
 
                 <div>
 
-                  <label htmlFor="entry-content" className="mb-2 block text-sm font-medium text-slate-700">
+                  <label htmlFor="entry-content" className="mb-2 block text-sm font-medium text-slate-700 dark:text-white">
 
                     Content
 
@@ -382,7 +382,7 @@ export default function JournalPage() {
 
                     rows={10}
 
-                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-[#1A73E8] focus:bg-white"
+                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-[#1A73E8] focus:bg-white dark:border-white/20 dark:bg-[#0a0a0a] dark:text-white dark:placeholder:text-white/50"
 
                   />
 

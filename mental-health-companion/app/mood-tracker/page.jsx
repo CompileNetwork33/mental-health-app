@@ -176,34 +176,34 @@ export default function MoodTrackerPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E]">
+    <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E] dark:bg-[#0a0a0a] dark:text-white">
       <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6">
         <section className="space-y-4 md:space-y-6">
-          <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+          <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
             <h1 className="text-2xl font-semibold text-[#1A73E8] md:text-3xl">Mood Tracker</h1>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-slate-600 dark:text-white/70">
               Track how you feel each day and discover patterns in your emotional wellbeing.
             </p>
             {error ? (
-              <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-4">
-                <p className="text-sm text-red-700 font-medium mb-2">{error}</p>
+              <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-4 dark:bg-red-900/30 dark:border-red-800">
+                <p className="text-sm text-red-700 font-medium mb-2 dark:text-red-400">{error}</p>
                 <button
                   onClick={() => window.location.reload()}
-                  className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-lg hover:bg-red-200 transition-colors"
+                  className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-lg hover:bg-red-200 transition-colors dark:bg-red-800 dark:text-red-300 dark:hover:bg-red-700"
                 >
                   Refresh Page
                 </button>
               </div>
             ) : null}
             {successMessage ? (
-              <p className="mt-4 rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+              <p className="mt-4 rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
                 {successMessage}
               </p>
             ) : null}
           </header>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
               <h2 className="text-lg font-semibold text-[#1A73E8]">Log today&apos;s mood</h2>
               <form onSubmit={handleSaveMood} className="mt-4 space-y-4">
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -212,20 +212,19 @@ export default function MoodTrackerPage() {
                       type="button"
                       key={option.mood}
                       onClick={() => setSelectedMood(option)}
-                      className={`rounded-2xl border px-3 py-3 text-left transition ${
-                        selectedMood.mood === option.mood
-                          ? 'border-[#1A73E8] bg-[#EAF3FE] shadow'
-                          : 'border-[#CFE4FF] bg-white hover:border-[#1A73E8] hover:bg-[#F5F7FA]'
-                      }`}
+                      className={`rounded-2xl border px-3 py-3 text-left transition ${selectedMood.mood === option.mood
+                        ? 'border-[#1A73E8] bg-[#EAF3FE] shadow dark:bg-[#1A73E8]/20'
+                        : 'border-[#CFE4FF] bg-white hover:border-[#1A73E8] hover:bg-[#F5F7FA] dark:border-white/20 dark:bg-[#0a0a0a] dark:hover:bg-[#171717]'
+                        }`}
                     >
                       <p className="text-2xl">{option.emoji}</p>
-                      <p className="mt-1 text-sm font-medium text-slate-700">{option.mood}</p>
+                      <p className="mt-1 text-sm font-medium text-slate-700 dark:text-white">{option.mood}</p>
                     </button>
                   ))}
                 </div>
 
                 <div>
-                  <label htmlFor="mood-note" className="mb-2 block text-sm font-medium text-slate-700">
+                  <label htmlFor="mood-note" className="mb-2 block text-sm font-medium text-slate-700 dark:text-white">
                     Mood note / reason
                   </label>
                   <textarea
@@ -234,7 +233,7 @@ export default function MoodTrackerPage() {
                     onChange={(event) => setNote(event.target.value)}
                     placeholder="What influenced your mood today?"
                     rows={4}
-                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-[#1A73E8] focus:bg-white"
+                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-[#1A73E8] focus:bg-white dark:border-white/20 dark:bg-[#0a0a0a] dark:text-white dark:placeholder:text-white/50"
                   />
                 </div>
 
@@ -255,33 +254,33 @@ export default function MoodTrackerPage() {
                   <p className="text-sm text-emerald-700">
                     {todayEntry.mood} (Score: {todayEntry.score})
                   </p>
-                  <p className="mt-2 text-sm text-slate-700">
+                  <p className="mt-2 text-sm text-slate-700 dark:text-white/80">
                     {todayEntry.note ? todayEntry.note : 'No note added yet.'}
                   </p>
-                  <p className="mt-2 text-xs text-slate-500">
+                  <p className="mt-2 text-xs text-slate-500 dark:text-white/50">
                     Logged at {new Date(todayEntry.created_at).toLocaleTimeString()}
                   </p>
                 </div>
               ) : (
-                <p className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+                <p className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600 dark:bg-white/10 dark:text-white/70">
                   No mood tracked today yet. Add your first check-in above.
                 </p>
               )}
             </article>
           </div>
 
-          <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+          <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
             <h2 className="text-lg font-semibold text-[#1A73E8]">Last 7 days mood history</h2>
             {history.length === 0 ? (
-              <div className="mt-3 rounded-2xl bg-[#F5F7FA] border border-[#E6ECF5] p-6 text-center">
-                <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#EAF3FE] flex items-center justify-center">
+              <div className="mt-3 rounded-2xl bg-[#F5F7FA] border border-[#E6ECF5] p-6 text-center dark:bg-[#0a0a0a] dark:border-white/10">
+                <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#EAF3FE] flex items-center justify-center dark:bg-[#1A73E8]/20">
                   <svg className="w-6 h-6 text-[#1A73E8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                 </div>
                 <h3 className="text-base font-semibold text-[#1A73E8] mb-2">No mood history yet</h3>
-                <p className="text-sm text-gray-600 mb-3">Start tracking your daily mood to see patterns and insights about your emotional wellbeing.</p>
-                <div className="inline-flex items-center gap-2 text-xs text-[#00BFA5] bg-[#E6F7F4] px-3 py-2 rounded-full">
+                <p className="text-sm text-gray-600 mb-3 dark:text-white/70">Start tracking your daily mood to see patterns and insights about your emotional wellbeing.</p>
+                <div className="inline-flex items-center gap-2 text-xs text-[#00BFA5] bg-[#E6F7F4] px-3 py-2 rounded-full dark:bg-[#00BFA5]/20">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
@@ -293,30 +292,30 @@ export default function MoodTrackerPage() {
                 {history.map((entry) => (
                   <li
                     key={entry.id}
-                    className="flex flex-col justify-between gap-2 rounded-2xl bg-[#F5F7FA] p-3 text-sm text-slate-700 sm:flex-row sm:items-center"
+                    className="flex flex-col justify-between gap-2 rounded-2xl bg-[#F5F7FA] p-3 text-sm text-slate-700 sm:flex-row sm:items-center dark:bg-[#0a0a0a] dark:text-white/80"
                   >
                     <div>
                       <p className="font-medium">
                         {entry.mood} (Score: {entry.score})
                       </p>
-                      <p className="text-xs text-slate-500">{new Date(entry.created_at).toLocaleString()}</p>
+                      <p className="text-xs text-slate-500 dark:text-white/50">{new Date(entry.created_at).toLocaleString()}</p>
                     </div>
-                    <p className="text-sm text-slate-600 sm:max-w-sm">{entry.note || 'No note provided.'}</p>
+                    <p className="text-sm text-slate-600 sm:max-w-sm dark:text-white/60">{entry.note || 'No note provided.'}</p>
                   </li>
                 ))}
               </ul>
             )}
           </article>
 
-          <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+          <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
             <h2 className="mb-4 text-lg font-semibold text-[#1A73E8]">Weekly mood chart</h2>
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ top: 12, right: 16, left: 4, bottom: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#DCE6F2" />
-                  <XAxis dataKey="day" stroke="#64748b" />
-                  <YAxis domain={[1, 5]} ticks={[1, 2, 3, 4, 5]} stroke="#64748b" />
-                  <Tooltip />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#DCE6F2" className="dark:stroke-white/10" />
+                  <XAxis dataKey="day" stroke="#64748b" className="dark:stroke-white/50" />
+                  <YAxis domain={[1, 5]} ticks={[1, 2, 3, 4, 5]} stroke="#64748b" className="dark:stroke-white/50" />
+                  <Tooltip contentStyle={{ backgroundColor: '#171717', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }} />
                   <Line
                     type="monotone"
                     dataKey="score"
@@ -328,7 +327,7 @@ export default function MoodTrackerPage() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            <p className="mt-2 text-xs text-slate-500">Mood score scale: 1 (Very Sad) to 5 (Very Happy)</p>
+            <p className="mt-2 text-xs text-slate-500 dark:text-white/50">Mood score scale: 1 (Very Sad) to 5 (Very Happy)</p>
           </article>
         </section>
       </div>

@@ -8,7 +8,7 @@ function calculateStreak(allMoods) {
   let streak = 0;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
+
   if (allMoods && allMoods.length > 0) {
     // Check if today has a mood entry
     const todayMoodEntry = allMoods.find(item => {
@@ -20,20 +20,20 @@ function calculateStreak(allMoods) {
 
     if (todayMoodEntry) {
       streak = 1; // Today counts as day 1
-      
+
       // Check consecutive days backwards
       let checkDate = new Date(today);
       checkDate.setDate(checkDate.getDate() - 1); // Start with yesterday
-      
+
       for (let i = 1; i < 365; i++) { // Check up to a year
         const checkDay = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
-        
+
         const dayMoodEntry = allMoods.find(item => {
           const itemDate = new Date(item.created_at);
           const itemDay = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate());
           return itemDay.getTime() === checkDay.getTime();
         });
-        
+
         if (dayMoodEntry) {
           streak++;
           checkDate.setDate(checkDate.getDate() - 1); // Move to previous day
@@ -43,7 +43,7 @@ function calculateStreak(allMoods) {
       }
     }
   }
-  
+
   return streak;
 }
 
@@ -130,7 +130,7 @@ export default function ProfilePage() {
       .select('id,created_at')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });
-    
+
     setTotalMoodEntries(allMoods?.length || 0);
     setStreakCounter(calculateStreak(allMoods || []));
 
@@ -239,36 +239,36 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E]">
+    <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E] dark:bg-[#0a0a0a] dark:text-white">
       <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6">
         <section className="space-y-4 md:space-y-6">
-          <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+          <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
             <h1 className="text-2xl font-semibold text-[#1A73E8] md:text-3xl">Profile & Settings</h1>
-            <p className="mt-2 text-sm text-[#1A1A2E]/80">
+            <p className="mt-2 text-sm text-[#1A1A2E]/80 dark:text-white/80">
               Personalize your companion experience and manage your wellness preferences.
             </p>
             {error ? (
-              <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-4">
-                <p className="text-sm text-red-700 font-medium mb-2">{error}</p>
+              <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-4 dark:bg-red-900/30 dark:border-red-800">
+                <p className="text-sm text-red-700 font-medium mb-2 dark:text-red-400">{error}</p>
                 <button
                   onClick={() => window.location.reload()}
-                  className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-lg hover:bg-red-200 transition-colors"
+                  className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-lg hover:bg-red-200 transition-colors dark:bg-red-800 dark:text-red-300 dark:hover:bg-red-700"
                 >
                   Refresh Page
                 </button>
               </div>
             ) : null}
             {successMessage ? (
-              <p className="mt-4 rounded-xl bg-emerald-100 px-3 py-2 text-sm text-emerald-700">{successMessage}</p>
+              <p className="mt-4 rounded-xl bg-emerald-100 px-3 py-2 text-sm text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">{successMessage}</p>
             ) : null}
           </header>
 
           <div className="grid gap-4 xl:grid-cols-3">
-            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md xl:col-span-2">
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md xl:col-span-2 dark:border-white/10 dark:bg-[#171717]">
               <h2 className="text-lg font-semibold text-[#1A73E8]">Edit profile</h2>
               <form onSubmit={handleSaveProfile} className="mt-4 space-y-4">
                 <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                  <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-2 border-[#00BFA5] bg-[#DDF3EF] text-2xl font-bold text-[#1A73E8]">
+                  <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-2 border-[#00BFA5] bg-[#DDF3EF] text-2xl font-bold text-[#1A73E8] dark:bg-[#0a0a0a]">
                     {avatarUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
@@ -277,21 +277,21 @@ export default function ProfilePage() {
                     )}
                   </div>
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-[#1A1A2E]">Upload avatar</label>
+                    <label className="mb-2 block text-sm font-medium text-[#1A1A2E] dark:text-white">Upload avatar</label>
                     <input
                       type="file"
                       accept="image/*"
                       onChange={handleAvatarUpload}
-                      className="w-full max-w-xs rounded-xl border border-[#CFE4FF] bg-[#F5F7FA] px-3 py-2 text-sm"
+                      className="w-full max-w-xs rounded-xl border border-[#CFE4FF] bg-[#F5F7FA] px-3 py-2 text-sm dark:border-white/20 dark:bg-[#0a0a0a] dark:text-white"
                     />
-                    <p className="mt-1 text-xs text-[#1A1A2E]/70">
+                    <p className="mt-1 text-xs text-[#1A1A2E]/70 dark:text-white/70">
                       {uploadingAvatar ? 'Uploading avatar...' : 'PNG/JPG recommended.'}
                     </p>
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="full-name" className="mb-2 block text-sm font-medium text-[#1A1A2E]">
+                  <label htmlFor="full-name" className="mb-2 block text-sm font-medium text-[#1A1A2E] dark:text-white">
                     Full name
                   </label>
                   <input
@@ -300,12 +300,12 @@ export default function ProfilePage() {
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     placeholder="Your full name"
-                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm outline-none transition focus:border-[#1A73E8]"
+                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm outline-none transition focus:border-[#1A73E8] dark:border-white/20 dark:bg-[#0a0a0a] dark:text-white dark:placeholder:text-white/50"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-medium text-[#1A1A2E]">
+                  <label htmlFor="email" className="mb-2 block text-sm font-medium text-[#1A1A2E] dark:text-white">
                     Email (read only)
                   </label>
                   <input
@@ -313,12 +313,12 @@ export default function ProfilePage() {
                     type="email"
                     value={email}
                     readOnly
-                    className="w-full cursor-not-allowed rounded-2xl border border-[#E6ECF5] bg-[#EEF2F7] px-4 py-3 text-sm text-[#1A1A2E]/70"
+                    className="w-full cursor-not-allowed rounded-2xl border border-[#E6ECF5] bg-[#EEF2F7] px-4 py-3 text-sm text-[#1A1A2E]/70 dark:border-white/10 dark:bg-[#0a0a0a] dark:text-white/50"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="bio" className="mb-2 block text-sm font-medium text-[#1A1A2E]">
+                  <label htmlFor="bio" className="mb-2 block text-sm font-medium text-[#1A1A2E] dark:text-white">
                     Bio / About me
                   </label>
                   <textarea
@@ -327,7 +327,7 @@ export default function ProfilePage() {
                     onChange={(event) => setBio(event.target.value)}
                     rows={5}
                     placeholder="Share a little about yourself..."
-                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm outline-none transition focus:border-[#1A73E8]"
+                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm outline-none transition focus:border-[#1A73E8] dark:border-white/20 dark:bg-[#0a0a0a] dark:text-white dark:placeholder:text-white/50"
                   />
                 </div>
 
@@ -341,19 +341,19 @@ export default function ProfilePage() {
               </form>
             </article>
 
-            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
               <h2 className="text-lg font-semibold text-[#1A73E8]">Your stats</h2>
               <div className="mt-4 space-y-3">
-                <div className="rounded-2xl bg-[#F5F7FA] p-4">
-                  <p className="text-xs text-[#1A1A2E]/70">Total journal entries</p>
+                <div className="rounded-2xl bg-[#F5F7FA] p-4 dark:bg-[#0a0a0a]">
+                  <p className="text-xs text-[#1A1A2E]/70 dark:text-white/70">Total journal entries</p>
                   <p className="mt-1 text-2xl font-bold text-[#1A73E8]">{totalJournalEntries}</p>
                 </div>
-                <div className="rounded-2xl bg-[#F5F7FA] p-4">
-                  <p className="text-xs text-[#1A1A2E]/70">Total mood entries</p>
+                <div className="rounded-2xl bg-[#F5F7FA] p-4 dark:bg-[#0a0a0a]">
+                  <p className="text-xs text-[#1A1A2E]/70 dark:text-white/70">Total mood entries</p>
                   <p className="mt-1 text-2xl font-bold text-[#00BFA5]">{totalMoodEntries}</p>
                 </div>
-                <div className="rounded-2xl bg-[#FFF6E8] p-4">
-                  <p className="text-xs text-[#1A1A2E]/70">Current streak</p>
+                <div className="rounded-2xl bg-[#FFF6E8] p-4 dark:bg-[#0a0a0a]">
+                  <p className="text-xs text-[#1A1A2E]/70 dark:text-white/70">Current streak</p>
                   <p className="mt-1 text-2xl font-bold text-[#FFB347]">{streakCounter} days</p>
                 </div>
               </div>
@@ -361,11 +361,11 @@ export default function ProfilePage() {
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
               <h2 className="text-lg font-semibold text-[#1A73E8]">Settings</h2>
               <div className="mt-4 space-y-4">
-                <label className="flex items-center justify-between gap-3 rounded-2xl bg-[#F5F7FA] p-4">
-                  <span className="text-sm font-medium text-[#1A1A2E]">Daily reminder</span>
+                <label className="flex items-center justify-between gap-3 rounded-2xl bg-[#F5F7FA] p-4 dark:bg-[#0a0a0a]">
+                  <span className="text-sm font-medium text-[#1A1A2E] dark:text-white">Daily reminder</span>
                   <button
                     type="button"
                     onClick={() => setDailyReminder((current) => !current)}
@@ -380,14 +380,14 @@ export default function ProfilePage() {
                 </label>
 
                 <div>
-                  <label htmlFor="notifications" className="mb-2 block text-sm font-medium text-[#1A1A2E]">
+                  <label htmlFor="notifications" className="mb-2 block text-sm font-medium text-[#1A1A2E] dark:text-white">
                     Notification preferences
                   </label>
                   <select
                     id="notifications"
                     value={notificationPreference}
                     onChange={(event) => setNotificationPreference(event.target.value)}
-                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm outline-none transition focus:border-[#1A73E8]"
+                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm outline-none transition focus:border-[#1A73E8] dark:border-white/20 dark:bg-[#0a0a0a] dark:text-white"
                   >
                     <option value="all">All notifications</option>
                     <option value="important">Important only</option>
@@ -396,14 +396,14 @@ export default function ProfilePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="theme" className="mb-2 block text-sm font-medium text-[#1A1A2E]">
+                  <label htmlFor="theme" className="mb-2 block text-sm font-medium text-[#1A1A2E] dark:text-white">
                     Theme preference
                   </label>
                   <select
                     id="theme"
                     value={themePreference}
                     onChange={(event) => setThemePreference(event.target.value)}
-                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm outline-none transition focus:border-[#1A73E8]"
+                    className="w-full rounded-2xl border border-[#CFE4FF] bg-[#F5F7FA] px-4 py-3 text-sm outline-none transition focus:border-[#1A73E8] dark:border-white/20 dark:bg-[#0a0a0a] dark:text-white"
                   >
                     <option value="system">System default</option>
                     <option value="light">Light</option>
@@ -413,7 +413,7 @@ export default function ProfilePage() {
               </div>
             </article>
 
-            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
               <h2 className="text-lg font-semibold text-[#1A73E8]">Account actions</h2>
               <div className="mt-4 space-y-3">
                 <button
@@ -428,12 +428,12 @@ export default function ProfilePage() {
                   type="button"
                   onClick={handleDeleteAccount}
                   disabled={processingDelete}
-                  className="w-full rounded-2xl border border-red-300 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-70"
+                  className="w-full rounded-2xl border border-red-300 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-70 dark:border-red-800 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-800"
                 >
                   {processingDelete ? 'Deleting account data...' : 'Delete account'}
                 </button>
 
-                <p className="text-xs text-[#1A1A2E]/70">
+                <p className="text-xs text-[#1A1A2E]/70 dark:text-white/70">
                   Deleting account removes your app data and signs you out. This action cannot be undone.
                 </p>
               </div>

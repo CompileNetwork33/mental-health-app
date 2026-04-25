@@ -63,7 +63,7 @@ export default function DashboardPage() {
       let streak = 0;
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       if (allMoods && allMoods.length > 0) {
         // Check if today has a mood entry
         const todayMoodEntry = allMoods.find(item => {
@@ -75,20 +75,20 @@ export default function DashboardPage() {
 
         if (todayMoodEntry) {
           streak = 1; // Today counts as day 1
-          
+
           // Check consecutive days backwards
           let checkDate = new Date(today);
           checkDate.setDate(checkDate.getDate() - 1); // Start with yesterday
-          
+
           for (let i = 1; i < 365; i++) { // Check up to a year
             const checkDay = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
-            
+
             const dayMoodEntry = allMoods.find(item => {
               const itemDate = new Date(item.created_at);
               const itemDay = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate());
               return itemDay.getTime() === checkDay.getTime();
             });
-            
+
             if (dayMoodEntry) {
               streak++;
               checkDate.setDate(checkDate.getDate() - 1); // Move to previous day
@@ -98,7 +98,7 @@ export default function DashboardPage() {
           }
         }
       }
-      
+
       setStreakCounter(streak);
 
       // Get last 7 days for weekly chart
@@ -106,7 +106,7 @@ export default function DashboardPage() {
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
       sevenDaysAgo.setHours(0, 0, 0, 0);
 
-      const moods = allMoods?.filter(item => 
+      const moods = allMoods?.filter(item =>
         new Date(item.created_at) >= sevenDaysAgo
       ) || [];
 
@@ -203,18 +203,18 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E]">
+    <main className="min-h-screen bg-[#F5F7FA] text-[#1A1A2E] dark:bg-[#0a0a0a] dark:text-white">
       <div className="mx-auto w-full max-w-6xl space-y-4 md:space-y-6 p-4 md:p-6">
         <section className="space-y-4 md:space-y-6">
-          <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+          <header className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
             <p className="text-sm font-medium text-[#00BFA5]">Welcome back</p>
             <h1 className="mt-1 text-2xl font-semibold md:text-3xl">Hi {userName}, how are you feeling today?</h1>
             {error ? (
-              <div className="mt-3 rounded-xl bg-red-50 border border-red-200 p-4">
-                <p className="text-sm text-red-700 font-medium mb-2">{error}</p>
+              <div className="mt-3 rounded-xl bg-red-50 border border-red-200 p-4 dark:bg-red-900/30 dark:border-red-800">
+                <p className="text-sm text-red-700 font-medium mb-2 dark:text-red-400">{error}</p>
                 <button
                   onClick={() => window.location.reload()}
-                  className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-lg hover:bg-red-200 transition-colors"
+                  className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-lg hover:bg-red-200 transition-colors dark:bg-red-800 dark:text-red-300 dark:hover:bg-red-700"
                 >
                   Refresh Page
                 </button>
@@ -223,36 +223,36 @@ export default function DashboardPage() {
           </header>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
               <h3 className="text-lg font-semibold text-[#1A73E8]">Today&apos;s Mood Summary</h3>
-              <p className="mt-3 text-2xl font-bold text-slate-800">{todayMood}</p>
-              <p className="mt-2 text-sm text-slate-600">Your daily check-ins help reveal emotional patterns.</p>
+              <p className="mt-3 text-2xl font-bold text-slate-800 dark:text-white">{todayMood}</p>
+              <p className="mt-2 text-sm text-slate-600 dark:text-white/70">Your daily check-ins help reveal emotional patterns.</p>
             </article>
 
-            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+            <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
               <h3 className="text-lg font-semibold text-[#00BFA5]">Your Progress</h3>
               <div className="mt-3 grid grid-cols-2 gap-4">
-                <div className="rounded-2xl bg-[#F5F7FA] p-3 text-center">
-                  <p className="text-xs text-slate-600">Current Streak</p>
+                <div className="rounded-2xl bg-[#F5F7FA] p-3 text-center dark:bg-[#0a0a0a]">
+                  <p className="text-xs text-slate-600 dark:text-white/70">Current Streak</p>
                   <p className="mt-1 text-2xl font-bold text-[#FFB347]">{streakCounter}</p>
-                  <p className="text-xs text-slate-500 mt-1">days</p>
+                  <p className="text-xs text-slate-500 mt-1 dark:text-white/50">days</p>
                 </div>
-                <div className="rounded-2xl bg-[#F5F7FA] p-3 text-center">
-                  <p className="text-xs text-slate-600">Journal Entries</p>
+                <div className="rounded-2xl bg-[#F5F7FA] p-3 text-center dark:bg-[#0a0a0a]">
+                  <p className="text-xs text-slate-600 dark:text-white/70">Journal Entries</p>
                   <p className="mt-1 text-2xl font-bold text-[#1A73E8]">{journalEntries.length}</p>
-                  <p className="text-xs text-slate-500 mt-1">total</p>
+                  <p className="text-xs text-slate-500 mt-1 dark:text-white/50">total</p>
                 </div>
               </div>
               <div className="mt-4">
-                <h4 className="text-sm font-medium text-slate-700 mb-2">Recent Journal</h4>
+                <h4 className="text-sm font-medium text-slate-700 mb-2 dark:text-white">Recent Journal</h4>
                 <div className="space-y-2">
                   {journalEntries.length === 0 ? (
-                    <p className="text-sm text-slate-600">No journal entries yet. Start writing your first reflection.</p>
+                    <p className="text-sm text-slate-600 dark:text-white/70">No journal entries yet. Start writing your first reflection.</p>
                   ) : (
                     journalEntries.slice(0, 2).map((entry) => (
-                      <div key={entry.id} className="rounded-2xl bg-[#F5F7FA] p-3">
-                        <p className="font-medium text-slate-800 text-sm">{entry.title || 'Untitled entry'}</p>
-                        <p className="mt-1 line-clamp-2 text-xs text-slate-600">{entry.content || 'No content'}</p>
+                      <div key={entry.id} className="rounded-2xl bg-[#F5F7FA] p-3 dark:bg-[#0a0a0a]">
+                        <p className="font-medium text-slate-800 text-sm dark:text-white">{entry.title || 'Untitled entry'}</p>
+                        <p className="mt-1 line-clamp-2 text-xs text-slate-600 dark:text-white/70">{entry.content || 'No content'}</p>
                       </div>
                     ))
                   )}
@@ -261,7 +261,7 @@ export default function DashboardPage() {
             </article>
           </div>
 
-          <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+          <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
             <h3 className="text-lg font-semibold text-[#1A73E8]">Quick Actions</h3>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               <Link
@@ -285,11 +285,11 @@ export default function DashboardPage() {
             </div>
           </article>
 
-          <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md">
+          <article className="rounded-3xl border border-[#E6ECF5] bg-white p-6 shadow-md dark:border-white/10 dark:bg-[#171717]">
             <h3 className="mb-4 text-lg font-semibold text-[#1A73E8]">Weekly Mood Trend</h3>
             <div className="h-72 w-full">
               {weeklyMoodData.length === 0 ? (
-                <p className="rounded-2xl bg-[#F5F7FA] p-4 text-sm text-slate-600">No mood data in the last 7 days yet.</p>
+                <p className="rounded-2xl bg-[#F5F7FA] p-4 text-sm text-slate-600 dark:bg-[#0a0a0a] dark:text-white/70">No mood data in the last 7 days yet.</p>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={weeklyMoodData} margin={{ top: 12, right: 16, left: 4, bottom: 8 }}>
@@ -309,7 +309,7 @@ export default function DashboardPage() {
                 </ResponsiveContainer>
               )}
             </div>
-            <p className="mt-2 text-xs text-slate-500">Mood score: 1 (very sad) to 5 (very happy)</p>
+            <p className="mt-2 text-xs text-slate-500 dark:text-white/50">Mood score: 1 (very sad) to 5 (very happy)</p>
           </article>
         </section>
       </div>

@@ -48,7 +48,7 @@ export default function SignupPage() {
     }
 
     setMessage('Account created successfully! Please check your email to verify your account.');
-    
+
     setTimeout(() => {
       router.push('/login');
       router.refresh();
@@ -56,30 +56,30 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F5F7FA] px-4 py-10">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F5F7FA] px-4 py-10 dark:bg-[#0a0a0a]">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute right-[-4rem] top-10 h-44 w-44 rounded-full bg-[#1A73E8]/20 blur-3xl sm:h-60 sm:w-60" />
         <div className="absolute bottom-6 left-[-3rem] h-48 w-48 rounded-full bg-[#00BFA5]/20 blur-3xl sm:h-64 sm:w-64" />
       </div>
 
-      <section className="relative z-10 w-full max-w-md rounded-[2rem] border border-white/70 bg-white/85 p-6 shadow-[0_20px_60px_rgba(148,163,184,0.18)] backdrop-blur-xl sm:p-8">
+      <section className="relative z-10 w-full max-w-md rounded-[2rem] border border-white/70 bg-white/85 p-6 shadow-[0_20px_60px_rgba(148,163,184,0.18)] backdrop-blur-xl sm:p-8 dark:border-white/10 dark:bg-[#171717]/85">
         <div className="mb-8 text-center">
-          <span className="inline-flex rounded-full bg-[#E6F7F4] px-4 py-1 text-sm font-medium text-[#00BFA5]">
+          <span className="inline-flex rounded-full bg-[#E6F7F4] px-4 py-1 text-sm font-medium text-[#00BFA5] dark:bg-[#00BFA5]/20 dark:text-[#00BFA5]">
             Begin your journey
           </span>
-          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-[#1A1A2E]">
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-[#1A1A2E] dark:text-white">
             Create your account
           </h1>
-          <p className="mt-3 text-sm leading-6 text-[#1A1A2E]/70">
+          <p className="mt-3 text-sm leading-6 text-[#1A1A2E]/70 dark:text-white/70">
             Save your reflections, track patterns, and build a gentle routine for your mental well-being.
           </p>
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-[#1A1A2E]">Name</span>
+            <span className="mb-2 block text-sm font-medium text-[#1A1A2E] dark:text-white">Name</span>
             <input
-              className="w-full rounded-2xl border border-[#CFE4FF] bg-white px-4 py-3 text-[#1A1A2E] outline-none transition focus:border-[#1A73E8] focus:ring-4 focus:ring-[#EAF3FE]"
+              className="w-full rounded-2xl border border-[#CFE4FF] bg-white px-4 py-3 text-[#1A1A2E] outline-none transition focus:border-[#1A73E8] focus:ring-4 focus:ring-[#EAF3FE] dark:border-white/20 dark:bg-[#0a0a0a] dark:text-white dark:placeholder:text-white/50"
               type="text"
               name="name"
               value={formData.name}
@@ -91,9 +91,9 @@ export default function SignupPage() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-[#1A1A2E]">Email</span>
+            <span className="mb-2 block text-sm font-medium text-[#1A1A2E] dark:text-white">Email</span>
             <input
-              className="w-full rounded-2xl border border-[#BFEAE3] bg-white px-4 py-3 text-[#1A1A2E] outline-none transition focus:border-[#00BFA5] focus:ring-4 focus:ring-[#E6F7F4]"
+              className="w-full rounded-2xl border border-[#BFEAE3] bg-white px-4 py-3 text-[#1A1A2E] outline-none transition focus:border-[#00BFA5] focus:ring-4 focus:ring-[#E6F7F4] dark:border-white/20 dark:bg-[#0a0a0a] dark:text-white dark:placeholder:text-white/50"
               type="email"
               name="email"
               value={formData.email}
@@ -105,9 +105,9 @@ export default function SignupPage() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-[#1A1A2E]">Password</span>
+            <span className="mb-2 block text-sm font-medium text-[#1A1A2E] dark:text-white">Password</span>
             <input
-              className="w-full rounded-2xl border border-[#CFE4FF] bg-white px-4 py-3 text-[#1A1A2E] outline-none transition focus:border-[#1A73E8] focus:ring-4 focus:ring-[#EAF3FE]"
+              className="w-full rounded-2xl border border-[#CFE4FF] bg-white px-4 py-3 text-[#1A1A2E] outline-none transition focus:border-[#1A73E8] focus:ring-4 focus:ring-[#EAF3FE] dark:border-white/20 dark:bg-[#0a0a0a] dark:text-white dark:placeholder:text-white/50"
               type="password"
               name="password"
               value={formData.password}
@@ -119,12 +119,12 @@ export default function SignupPage() {
           </label>
 
           {error ? (
-            <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/30 dark:text-red-400">
               {error}
             </p>
           ) : null}
           {message ? (
-            <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+            <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
               {message}
             </p>
           ) : null}
@@ -138,7 +138,7 @@ export default function SignupPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-[#1A1A2E]/70">
+        <p className="mt-6 text-center text-sm text-[#1A1A2E]/70 dark:text-white/70">
           Already have an account?{' '}
           <Link className="font-semibold text-[#1A73E8] transition hover:text-[#1557AD]" href="/login">
             Log in
